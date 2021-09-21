@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "959916174714",
+    "project_id": "petsmatchingapp",
+    "storage_bucket": "petsmatchingapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:959916174714:android:199322d67088a3ec637ac3",
+        "android_client_info": {
+          "package_name": "com.example.petsmatchingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "959916174714-n2v1jg6srmko2huegrj06luc4tiunhkr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.petsmatchingapp",
+            "certificate_hash": "03ef649b461fd118ad5a6c9b265a51066b557950"
+          }
+        },
+        {
+          "client_id": "959916174714-kf7303jare2ggqmpesf1g61pnabosueg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChg9YleN4f0QZW7C_n2BxVgpQzPK97My4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "959916174714-kf7303jare2ggqmpesf1g61pnabosueg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

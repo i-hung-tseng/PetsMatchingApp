@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.activity.SplashActivity">
+
+
+    <com.example.petsmatchingapp.utils.JFTextView
+        android:id="@+id/tv_app_name1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name_chinese"
+        android:textSize="@dimen/splash_title_textSize"
+        android:textStyle="bold"
+        android:textColor="@color/grey_light"
+        app:layout_constraintBottom_toTopOf="@id/iv_app_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="@dimen/splash_title_marginBottom"/>
+
+
+
+
+    <ImageView
+        android:id="@+id/iv_app_logo"
+        android:layout_width="@dimen/splash_logo_weight"
+        android:layout_height="@dimen/splash_logo_height"
+        android:src="@drawable/icon_dog"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,34 @@
+<resources>
+    <string name="app_name">PetsMatchingApp</string>
+
+    <string name="app_name_chinese">寵物約散</string>
+
+    <string name="please_wait">Please Wait</string>
+    <string name="login">登入</string>
+    <string name="hint_enter_your_email">請輸入信箱</string>
+    <string name="hint_enter_your_password">請輸入密碼</string>
+    <string name="login_forgot_account">忘記密碼</string>
+    <string name="login_don_have_account">還沒有帳號嗎?</string>
+    <string name="register">註冊</string>
+    <string name="msg_login_successful">登入成功</string>
+
+    <string name="toolbar_title_register_account">註冊帳號</string>
+    <string name="hint_enter_your_name">請輸入您的姓名</string>
+    <string name="hint_enter_again_password">請再次輸入您的密碼</string>
+    <string name="hint_do_not_enter_same_password">請再確認密碼是否一致</string>
+    <string name="register_already_have_account">我已經註冊囉!</string>
+    <string name="register_pick_me_to_login">點我登入</string>
+    <string name="register_success">恭喜您註冊成功!</string>
+
+    <string name="toolbar_title_forgot_account">忘記密碼</string>
+    <string name="forgotAccount_find_your_account">找回密碼</string>
+    <string name="forgotAccount_description">請輸入您的信箱，我們將會傳送信箱到您的郵件地址。並請您透過信箱去完成更改密碼的手續。 </string>
+    <string name="submit">送出</string>
+    <string name="forgotAccount_already_send_email">我們已經寄送更改密碼的信件到您信箱囉!</string>
+    <string name="title_activity_pet">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+
+</resources>
