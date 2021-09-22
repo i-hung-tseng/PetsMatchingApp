@@ -3,6 +3,7 @@ package com.example.petsmatchingapp.ui
 import android.app.Application
 import com.example.petsmatchingapp.BuildConfig
 import com.example.petsmatchingapp.viewmodel.AccountViewModel
+import com.example.petsmatchingapp.viewmodel.MatchingViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
@@ -23,6 +24,7 @@ class MyApp: Application() {
 
         val viewModelModule = module {
             viewModel { AccountViewModel() }
+            viewModel { MatchingViewModel() }
         }
 
         startKoin {
@@ -31,7 +33,5 @@ class MyApp: Application() {
                 viewModelModule
             )
         }
-
-
     }
 }

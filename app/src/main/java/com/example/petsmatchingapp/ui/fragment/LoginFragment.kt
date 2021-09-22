@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +14,7 @@ import com.example.petsmatchingapp.R
 import com.example.petsmatchingapp.databinding.FragmentLoginBinding
 import com.example.petsmatchingapp.ui.activity.MatchingActivity
 import com.example.petsmatchingapp.viewmodel.AccountViewModel
-import org.koin.android.ext.android.bind
+import com.google.firebase.auth.FirebaseAuth
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class LoginFragment : BaseFragment(),View.OnClickListener {
@@ -37,6 +36,12 @@ class LoginFragment : BaseFragment(),View.OnClickListener {
         binding.btnLogin.setOnClickListener(this)
         binding.tvForgotPassword.setOnClickListener(this)
         binding.tvRegister.setOnClickListener(this)
+
+
+        if(FirebaseAuth.getInstance().currentUser != null){
+            startActivity(Intent(requireActivity(),MatchingActivity::class.java))
+            requireActivity().finish()
+        }
 
 
         nav = findNavController()
@@ -114,5 +119,6 @@ class LoginFragment : BaseFragment(),View.OnClickListener {
         hideDialog()
         showSnackBar(message, true)
     }
+
 
 }

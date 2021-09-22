@@ -16,5 +16,6 @@
 
     <color name="light_pewter_blue">#8ac0b5</color>
     <color name="pewter_blue">#56c0b2</color>
+    <color name="status_color">	#007979</color>
 
 </resources>

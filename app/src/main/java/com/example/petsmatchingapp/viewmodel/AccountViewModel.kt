@@ -1,5 +1,7 @@
 package com.example.petsmatchingapp.viewmodel
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.petsmatchingapp.model.User
@@ -16,6 +18,31 @@ import timber.log.Timber
 import java.io.IOException
 
 class AccountViewModel: ViewModel() {
+
+
+
+
+    private val _userDetail = MutableLiveData<User>()
+    val userDetail: LiveData<User>
+    get() = _userDetail
+
+
+
+
+    init {
+        getUserDetail()
+    }
+
+
+
+
+    fun getCurrentUID(): String?{
+        return FirebaseAuth.getInstance().currentUser?.uid
+    }
+
+
+
+
 
 
 
@@ -80,4 +107,23 @@ class AccountViewModel: ViewModel() {
 
         }
 
+
+    fun getUserDetail(){
+
+        getCurrentUID()?.let {
+            FirebaseFirestore.getInstance().collection(Constant.USER)
+                .document(it)
+                .get()
+                .addOnSuccessListener {
+                    _userDetail.postValue(it.toObject(User::class.java))
+                }
+                .addOnFailureListener {
+                    Timber.d("Error while getUserDetail cause$it")
+                }
+        }
+    }
+
+    fun signOut(){
+        FirebaseAuth.getInstance().signOut()
+    }
 }

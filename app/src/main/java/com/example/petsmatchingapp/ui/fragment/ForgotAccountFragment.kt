@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.petsmatchingapp.R
-import com.example.petsmatchingapp.databinding.FragmentForgotAccountBinding
+import com.example.petsmatchingapp.databinding.FragmentForgotaccountBinding
 import com.example.petsmatchingapp.viewmodel.AccountViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -15,7 +15,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class ForgotAccountFragment : BaseFragment() {
 
 
-    private lateinit var binding: FragmentForgotAccountBinding
+    private lateinit var binding: FragmentForgotaccountBinding
     private val accountViewModel: AccountViewModel by sharedViewModel()
 
 
@@ -23,7 +23,7 @@ class ForgotAccountFragment : BaseFragment() {
                               savedInstanceState: Bundle?): View? {
 
 
-        binding = FragmentForgotAccountBinding.inflate(inflater)
+        binding = FragmentForgotaccountBinding.inflate(inflater)
 
         binding.btnForgotSubmit.setOnClickListener{
 
