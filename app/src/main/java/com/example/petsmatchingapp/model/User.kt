@@ -7,5 +7,6 @@ data class User(
     val password: String = "",
     val image: String = "",
     val gender: String = "",
+    val area: String =  "",
     val profileCompleted: Boolean = false
 )

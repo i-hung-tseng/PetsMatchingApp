@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <data>
+        <variable
+            name="invitation"
+            type="com.example.petsmatchingapp.model.Invitation" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/item_background"
+        android:layout_margin="@dimen/dashboard_cardView_margin"
+        app:cardCornerRadius="@dimen/dashboard_cardView_radius">
+
+
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+
+    <ImageView
+        android:id="@+id/iv_dashboard_invitation_item_list_image"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dashboard_image_height"
+        android:scaleType="center">
+
+    </ImageView>
+
+
+
+        <com.example.petsmatchingapp.utils.JFTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/home_fragment_pet_type(invitation.pet_type,invitation.pet_type_description)}"/>
+
+
+        <com.example.petsmatchingapp.utils.JFTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@{@string/home_fragment_pet_place(invitation.area,invitation.date_place)}"/>
+
+        <com.example.petsmatchingapp.utils.JFTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/home_fragment_pet_time(invitation.date_time)}"/>
+
+
+</LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

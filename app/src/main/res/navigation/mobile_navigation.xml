@@ -13,13 +13,23 @@
         <action
             android:id="@+id/action_navigation_home_to_profileFragment"
             app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_addInvitationFragment"
+            app:destination="@id/addInvitationFragment" />
+        <action
+            android:id="@+id/action_navigation_home_to_invitationDetailFragment"
+            app:destination="@id/invitationDetailFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.example.petsmatchingapp.ui.fragment.DashboardFragment"
         android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        tools:layout="@layout/fragment_dashboard" >
+        <action
+            android:id="@+id/action_navigation_dashboard_to_invitationDetailFragment"
+            app:destination="@id/invitationDetailFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_notifications"
@@ -33,5 +43,35 @@
         <action
             android:id="@+id/action_profileFragment_to_navigation_home"
             app:destination="@id/navigation_home" />
+        <action
+            android:id="@+id/action_profileFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.example.petsmatchingapp.ui.fragment.EditProfileFragment"
+        android:label="EditProfileFragment" >
+        <action
+            android:id="@+id/action_editProfileFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addInvitationFragment"
+        android:name="com.example.petsmatchingapp.ui.fragment.AddInvitationFragment"
+        android:label="AddInvitationFragment" >
+        <action
+            android:id="@+id/action_addInvitationFragment_to_navigation_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
+    <fragment
+        android:id="@+id/invitationDetailFragment"
+        android:name="com.example.petsmatchingapp.ui.fragment.InvitationDetailFragment"
+        android:label="InvitationDetailFragment" >
+        <action
+            android:id="@+id/action_invitationDetailFragment_to_navigation_home"
+            app:destination="@id/navigation_home" />
+        <action
+            android:id="@+id/action_invitationDetailFragment_to_navigation_dashboard"
+            app:destination="@id/navigation_dashboard" />
     </fragment>
 </navigation>

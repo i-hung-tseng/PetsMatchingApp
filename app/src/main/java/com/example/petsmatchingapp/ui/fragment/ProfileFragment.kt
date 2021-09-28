@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.petsmatchingapp.R
 import com.example.petsmatchingapp.databinding.FragmentProfileBinding
@@ -15,7 +16,9 @@ import com.example.petsmatchingapp.ui.activity.MatchingActivity
 import com.example.petsmatchingapp.utils.Constant
 import com.example.petsmatchingapp.viewmodel.AccountViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import org.koin.android.ext.android.bind
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import timber.log.Timber
 
 class ProfileFragment : BaseFragment(),View.OnClickListener {
 
@@ -38,7 +41,8 @@ class ProfileFragment : BaseFragment(),View.OnClickListener {
         }
 
         accountViewModel.userDetail.observe( viewLifecycleOwner, Observer {
-
+            Timber.d("viewModel = $accountViewModel")
+            Timber.d("accountId = ${accountViewModel.userDetail.value!!.id}")
             Constant.loadUserImage(it.image,binding.ivProfileFragmentImage)
             binding.tvProfileFragmentName.setText(it.name)
             binding.tvProfileFragmentEmail.setText(it.email)
@@ -47,7 +51,7 @@ class ProfileFragment : BaseFragment(),View.OnClickListener {
 
 
         binding.btnProfileFragmentSignout.setOnClickListener(this)
-
+        binding.btnProfileFragmentGoEdit.setOnClickListener(this)
         return binding.root
     }
 
@@ -66,6 +70,9 @@ class ProfileFragment : BaseFragment(),View.OnClickListener {
                 accountViewModel.signOut()
                 startActivity(Intent(requireActivity(),AccountActivity::class.java))
                 requireActivity().finish()
+            }
+            binding.btnProfileFragmentGoEdit ->{
+                findNavController().navigate(R.id.action_profileFragment_to_editProfileFragment)
             }
 
 

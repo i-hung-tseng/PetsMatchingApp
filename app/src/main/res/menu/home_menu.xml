@@ -2,12 +2,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
+
     <item
+        android:id="@+id/navigation_add_invitation"
+        android:icon="@drawable/ic_baseline_add_24"
+        app:showAsAction="always"
+        android:title="@string/navigation_add_invitation">
+    </item>
+
+    <item
+
         android:id="@+id/navigation_profile"
         android:icon="@drawable/ic_baseline_person_24"
         app:showAsAction="always"
         android:title="@string/navigation_profile">
     </item>
+
+
 
 
 </menu>
