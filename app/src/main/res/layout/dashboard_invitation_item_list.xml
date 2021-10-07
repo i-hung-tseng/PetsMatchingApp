@@ -50,9 +50,9 @@
         android:text="@{@string/home_fragment_pet_place(invitation.area,invitation.date_place)}"/>
 
         <com.example.petsmatchingapp.utils.JFTextView
+            android:id="@+id/tv_dashboard_invitation_item_list_date_time"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@{@string/home_fragment_pet_time(invitation.date_time)}"/>
+            android:layout_height="wrap_content" />
 
 
 </LinearLayout>

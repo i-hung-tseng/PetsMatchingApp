@@ -77,6 +77,54 @@
     <string name="home_fragment_pet_type">寵物種類: %1$s-%2$s</string>
     <string name="home_fragment_pet_place">地點: %1$s-%2$s</string>
     <string name="home_fragment_pet_time">時間: %1$s</string>
+    <string name="city_keelung">基隆市</string>
+    <string name="city_taipei">台北市</string>
+    <string name="city_newTaipei">新北市</string>
+    <string name="toolbar_title_search_invitation">搜尋邀約</string>
+    <string name="result_sort">結果排序</string>
+    <string name="update_day">更新日期</string>
+    <string name="invitation_day">邀約日期</string>
+    <string name="other">其它</string>
+    <string name="city_taoyuan">桃園市</string>
+    <string name="city_xinzhu">新竹市</string>
+    <string name="city_xinzhu_county">新竹縣</string>
+    <string name="city_miaoli">苗栗市</string>
+    <string name="city_miaoli_county">苗栗縣</string>
+    <string name="city_taichung">台中市</string>
+    <string name="city_zhanghua_county">彰化縣</string>
+    <string name="city_zhanghua">彰化市</string>
+    <string name="city_nantou">南投市</string>
+    <string name="nantou_county">南投縣</string>
+    <string name="city_yunlin_county">雲林縣</string>
+    <string name="city_jiayi">嘉義市</string>
+    <string name="city_jaiyi_county">嘉義縣</string>
+    <string name="city_tainan">台南市</string>
+    <string name="city_gaoxiong">高雄市</string>
+    <string name="city_pingtung">屏東市</string>
+    <string name="city_pingtung_county">屏東縣</string>
+    <string name="city_yilan">宜蘭市</string>
+    <string name="city_yilan_county">宜蘭縣</string>
+    <string name="city_hualien_county">花蓮縣</string>
+    <string name="city_hualien">花蓮市</string>
+    <string name="city_taidong_county">台東縣</string>
+    <string name="city_taidong">台東市</string>
+    <string name="city_penghu_county">澎湖縣</string>
+    <string name="city_ludao">綠島</string>
+    <string name="city_lanyu">蘭嶼</string>
+    <string name="city_jinmen">金門縣</string>
+    <string name="city_matus">馬祖</string>
+    <string name="city_lianjiang">連江縣</string>
+    <string name="dog">狗</string>
+    <string name="cat">貓</string>
+    <string name="rabbit">兔子</string>
+    <string name="bird">鳥</string>
+    <string name="pig">豬</string>
+    <string name="fish">魚</string>
+    <string name="search">搜尋</string>
+    <string name="invitation_time">邀約時間</string>
+    <string name="update_time">更新時間</string>
 
+
+    <string name="msg_choose_your_result_sort">請選擇排序方法</string>
 
 </resources>

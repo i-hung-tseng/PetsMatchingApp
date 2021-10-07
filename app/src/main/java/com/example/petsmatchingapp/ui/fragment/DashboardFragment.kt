@@ -41,13 +41,32 @@ class DashboardFragment : BaseFragment() {
 
     accountViewModel.getUserDetail()
 
-    matchingViewModel.allInvitationList.observe(viewLifecycleOwner, Observer {
+    binding.fabSearch.setOnClickListener{
+      nav.navigate(R.id.action_navigation_dashboard_to_searchFragment)
+    }
+
+    matchingViewModel.dashboardInvitationList.observe(viewLifecycleOwner, Observer {
+      Timber.d("dashboardInvitation ${it.size}")
       dashboardAdapter.submitList(it)
+    })
+
+
+    matchingViewModel.allInvitationList.observe(viewLifecycleOwner, Observer {
+      if (matchingViewModel.dashboardInvitationList.value == null){
+        dashboardAdapter.submitList(it)
+        Timber.d("dashboardInvitation裡面有資料啦 不用更新")
+      }else{
+        Timber.d("dashboardInvitation裡面有資料啦 不用更新")
+      }
     })
 
     setAdapter()
     nav = findNavController()
-    accountViewModel.getCurrentUID()?.let { matchingViewModel.getAllInvitation(it,this) }
+
+
+    accountViewModel.getCurrentUID()?.let { matchingViewModel.getAllInvitation(it,this)
+    Timber.d("onCreateView dashboardFragment")}
+
 
 
 
@@ -68,6 +87,8 @@ class DashboardFragment : BaseFragment() {
     binding.rvDashboardFragment.adapter = dashboardAdapter
 
   }
+
+
 
 
 

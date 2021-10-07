@@ -30,6 +30,16 @@ object Constant {
     const val ID: String = "id"
     const val PET_TYPE = "pet_type"
 
+    const val MESSAGE: String = "message"
+
+    const val RESULT_SORT_UPDATE_DAY = "result_sort_update_day"
+    const val RESULT_SORT_INVITATION_DAY = "result_sort_invitation_day"
+
+    const val UPDATE_TIME = "update_time"
+    const val DATE_TIME = "date_time"
+
+    const val LAST_MESSAGE = "last_message"
+
 
     fun loadUserImage(url: Any, v:ImageView){
 

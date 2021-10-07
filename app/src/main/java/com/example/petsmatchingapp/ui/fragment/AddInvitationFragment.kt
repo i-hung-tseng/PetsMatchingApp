@@ -21,6 +21,7 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.VisibleForTesting
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
 import com.example.petsmatchingapp.R
 import com.example.petsmatchingapp.databinding.FragmentAddInvitationBinding
 import com.example.petsmatchingapp.model.Invitation
@@ -29,6 +30,8 @@ import com.example.petsmatchingapp.utils.Constant
 import com.example.petsmatchingapp.viewmodel.AccountViewModel
 import com.example.petsmatchingapp.viewmodel.MatchingViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.Timestamp
+import com.google.firebase.database.ServerValue
 import org.koin.android.ext.android.bind
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.w3c.dom.Text
@@ -48,7 +51,7 @@ class AddInvitationFragment : BaseFragment(),View.OnClickListener {
     private var selectedPetType: String? = null
     private var selectedArea: String? = null
     private lateinit var datePicker: DatePickerDialog
-    private var selectedDate: String? = null
+    private var selectedDate: Timestamp? = null
 
 
     private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ uri ->
@@ -157,18 +160,30 @@ class AddInvitationFragment : BaseFragment(),View.OnClickListener {
 
             }
             binding.btnAddInvitationFragmentSubmit ->{
-                showDialog(resources.getString(R.string.please_wait))
+
                if (validDataForm()){
+                   showDialog(resources.getString(R.string.please_wait))
+                   val currentTime = System.currentTimeMillis()
+                   val update_time = Timestamp(Date(currentTime))
                    val invitation = Invitation(
                        user_id = accountViewModel.userDetail.value!!.id,
+                       user_name = accountViewModel.userDetail.value?.name,
+                       user_image = accountViewModel.userDetail.value?.image,
                        pet_image = mUri!!,
                        pet_type = selectedPetType!!,
                        pet_type_description = binding.edAddInvitationPetTypeDescription.text.toString().trim(),
                        area = selectedArea!!,
                        date_place = binding.edAddInvitationDatePlace.text.toString().trim(),
                        date_time = selectedDate!!,
-                       note = binding.edAddInvitationNote.text.toString().trim()
+                       note = binding.edAddInvitationNote.text.toString().trim(),
+                       update_time = Timestamp(Date(System.currentTimeMillis()))
                    )
+                   Timber.d("格式date_time:${ServerValue.TIMESTAMP}")
+                   Timber.d("格式selected: $selectedDate")
+                   Timber.d("格式 update_time :$update_time")
+                   Timber.d("格式 update_time_toDate: ${update_time.toDate()}")
+                   Timber.d("格式 update_time_toDate.time: ${update_time.toDate().time}")
+
                    matchingViewModel.addInvitationToFireStore(this,invitation)
                }
             }
@@ -189,15 +204,17 @@ class AddInvitationFragment : BaseFragment(),View.OnClickListener {
         val calendar = Calendar.getInstance()
         datePicker = DatePickerDialog(requireContext(),
             { _, year, month, dayOfMonth ->
-                Timber.d("listener year = $year")
-                Timber.d("listener month = $month")
-                Timber.d("listener dayOfMonth = $dayOfMonth")
                 val mFormat = "yyyy-MM-dd"
                 val sdf = SimpleDateFormat(mFormat, Locale.getDefault())
                 calendar.set(year,month,dayOfMonth)
-                selectedDate = sdf.format(calendar.time)
                 binding.edAddInvitationDateTime.setText(sdf.format(calendar.time))
+                val calLongType = calendar.timeInMillis
+                val timeStamp = Timestamp(Date(calLongType))
+                selectedDate = timeStamp
+
+
             },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH))
+
 
         datePicker.datePicker.minDate = Calendar.getInstance().timeInMillis
 
@@ -207,6 +224,7 @@ class AddInvitationFragment : BaseFragment(),View.OnClickListener {
     fun addInvitationSuccess(){
        hideDialog()
        showSnackBar(resources.getString(R.string.add_invitation_successful),false)
+        findNavController().navigate(R.id.action_addInvitationFragment_to_navigation_home)
     }
 
     fun addInvitationFail(e: String){
@@ -237,10 +255,10 @@ class AddInvitationFragment : BaseFragment(),View.OnClickListener {
                 false
             }
 
-            selectedDate.isNullOrBlank() ->{
-                showSnackBar(resources.getString(R.string.hint_enter_date_time),true)
-                false
-            }
+//            selectedDate.isNullOrBlank() ->{
+//                showSnackBar(resources.getString(R.string.hint_enter_date_time),true)
+//                false
+//            }
 
             TextUtils.isEmpty(binding.edAddInvitationNote.text.toString().trim()) ->{
                 showSnackBar(resources.getString(R.string.hint_enter_date_note),true)

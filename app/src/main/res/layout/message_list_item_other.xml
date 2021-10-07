@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <data>
+        <variable
+            name="message"
+            type="com.example.petsmatchingapp.model.Message" />
+
+
+    </data>
+
+    <RelativeLayout
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+
+        <ImageView
+            android:id="@+id/iv_item_message_other_image"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            tools:src = "@drawable/icon_dog"/>
+
+
+
+        <com.example.petsmatchingapp.utils.JFTextView
+            android:id="@+id/item_message_other_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="@{message.message}"
+            android:padding="5dp"
+            android:maxWidth="250dp"
+            android:textSize="16sp"
+            android:layout_toEndOf="@id/iv_item_message_other_image"
+            android:layout_alignTop="@id/iv_item_message_other_image"
+            android:background="@drawable/message_backgorund_other"
+            tools:text = "今天我吃飽了喔，我想應該也還沒吃飽啦"/>
+
+        <com.example.petsmatchingapp.utils.JFTextView
+            android:id="@+id/item_message_other_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/item_message_other_message"
+            android:layout_alignBottom="@id/item_message_other_message"
+            android:layout_marginStart="5dp"
+            tools:text="03:05 pm"
+            android:textSize="12sp"
+            app:layout_constraintStart_toEndOf="@id/item_message_other_message">
+
+        </com.example.petsmatchingapp.utils.JFTextView>
+
+
+    </RelativeLayout>
+
+</layout>

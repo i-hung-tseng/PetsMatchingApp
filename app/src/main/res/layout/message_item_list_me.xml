@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="message"
+            type="com.example.petsmatchingapp.model.Message" />
+
+    </data>
+
+
+
+    <RelativeLayout
+        android:padding="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+
+            <com.example.petsmatchingapp.utils.JFTextView
+                android:id="@+id/tv_item_message_me_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@id/tv_item_message_me_message"
+                android:layout_alignBottom="@id/tv_item_message_me_message"
+                android:layout_marginEnd="5dp"
+                android:textSize="12sp"
+                tools:text = "13:00">
+
+
+            </com.example.petsmatchingapp.utils.JFTextView>
+
+            <com.example.petsmatchingapp.utils.JFTextView
+                android:id="@+id/tv_item_message_me_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{message.message}"
+                android:layout_alignParentEnd="true"
+                android:padding="5dp"
+                android:textSize="16sp"
+                android:maxWidth="250dp"
+                android:background="@drawable/message_background_me"
+                tools:text = "你今天吃飽了嗎?">
+
+
+            </com.example.petsmatchingapp.utils.JFTextView>
+
+
+    </RelativeLayout>
+</layout>

@@ -21,6 +21,7 @@ import com.example.petsmatchingapp.utils.Constant
 import com.example.petsmatchingapp.viewmodel.AccountViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.w3c.dom.Text
+import timber.log.Timber
 import java.lang.Exception
 import java.util.jar.Manifest
 
@@ -91,6 +92,7 @@ class EditProfileFragment : BaseFragment(),View.OnClickListener {
     fun saveImageSuccessful(uri: Uri){
         showSnackBar(resources.getString(R.string.update_user_profile_successful),false)
         mUri = uri.toString()
+        Timber.d("mUri = $mUri")
 
     }
 

@@ -46,4 +46,10 @@
     <dimen name="dashboard_cardView_margin">8dp</dimen>
     <dimen name="dashboard_image_height">100dp</dimen>
 
+    <dimen name="search_title_textSize">20sp</dimen>
+    <dimen name="search_title_margin_top">20dp</dimen>
+    <dimen name="search_layout_margin_top">10dp</dimen>
+    <dimen name="search_checkbox_padding_start_end">3dp</dimen>
+    <dimen name="search_checkbox_padding_top_bottom">2dp</dimen>
+
 </resources>

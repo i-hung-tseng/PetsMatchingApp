@@ -23,6 +23,19 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_search"
+        android:transitionName="search_fragment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:tint="@android:color/white"
+        android:src="@drawable/ic_baseline_search_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="5dp">
+
+    </com.google.android.material.floatingactionbutton.FloatingActionButton>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

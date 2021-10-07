@@ -11,6 +11,8 @@ import com.example.petsmatchingapp.databinding.HomeInvitationItemListBinding
 import com.example.petsmatchingapp.model.Invitation
 import com.example.petsmatchingapp.ui.fragment.HomeFragment
 import com.example.petsmatchingapp.utils.Constant
+import java.text.SimpleDateFormat
+import java.util.*
 
 class HomeAdapter(val fragment: HomeFragment): ListAdapter<Invitation, HomeAdapter.HomeViewHolder>(DiffCallback) {
 
@@ -31,6 +33,11 @@ class HomeAdapter(val fragment: HomeFragment): ListAdapter<Invitation, HomeAdapt
     class HomeViewHolder(val binding: HomeInvitationItemListBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: Invitation){
             binding.invitation = item
+            val mFormat = "yyyy-MM-dd"
+            val sdf = SimpleDateFormat(mFormat, Locale.getDefault())
+            val stampToTime = item.date_time?.toDate()?.time
+            val time = "時間: " + sdf.format(stampToTime)
+            binding.tvHomeInvitationItemListDateTime.text = time
             Constant.loadPetImage(item.pet_image,binding.ivHomeInvitationItemListImage)
             binding.executePendingBindings()
 

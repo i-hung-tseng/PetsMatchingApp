@@ -16,6 +16,7 @@ import com.example.petsmatchingapp.utils.Constant
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -34,7 +35,9 @@ class AccountViewModel: ViewModel() {
     get() = _userDetail
 
 
-
+    private val _selectedUserDetail = MutableLiveData<User>()
+    val selectedUserDetail: LiveData<User>
+    get() = _selectedUserDetail
 
 
 
@@ -164,6 +167,19 @@ class AccountViewModel: ViewModel() {
                 .addOnFailureListener {
                     fragment.saveImageFail(it.toString())
                 }
+
+    }
+
+    fun findUserDetailByID(user_id: String){
+
+        Firebase.firestore.collection(Constant.USER).document(user_id).get()
+            .addOnSuccessListener {
+                _selectedUserDetail.postValue(it.toObject(User::class.java))
+            }
+            .addOnFailureListener {
+
+            }
+
 
     }
 }

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <data>
+        <variable
+            name="lastMessage"
+            type="com.example.petsmatchingapp.model.LastMessage" />
+
+
+    </data>
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="60dp"
+        android:layout_height="60dp">
+
+        <ImageView
+            android:id="@+id/iv_last_message_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="vertical"
+        android:layout_marginStart="5dp">
+
+        <com.example.petsmatchingapp.utils.JFTextView
+            android:id="@+id/tv_message_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="@{lastMessage.display_name}"
+            tools:text = "王大明"/>
+
+
+        <com.example.petsmatchingapp.utils.JFTextView
+            android:id="@+id/tv_message_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@{lastMessage.message}"
+            tools:text = "我是王大明我今天有很多話，有關於小明的話"/>
+
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
+</layout>

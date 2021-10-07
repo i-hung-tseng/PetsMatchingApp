@@ -1,5 +1,6 @@
 package com.example.petsmatchingapp.ui.adapter
 
+import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -11,6 +12,9 @@ import com.example.petsmatchingapp.databinding.DashboardInvitationItemListBindin
 import com.example.petsmatchingapp.model.Invitation
 import com.example.petsmatchingapp.ui.fragment.DashboardFragment
 import com.example.petsmatchingapp.utils.Constant
+import timber.log.Timber
+import java.text.SimpleDateFormat
+import java.util.*
 
 class DashboardAdapter(private val fragment: DashboardFragment): ListAdapter<Invitation, DashboardAdapter.DashboardViewHolder>(DiffCallback){
 
@@ -20,6 +24,11 @@ class DashboardAdapter(private val fragment: DashboardFragment): ListAdapter<Inv
     class DashboardViewHolder(val binding: DashboardInvitationItemListBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: Invitation){
             binding.invitation = item
+            val format = "yyyy-MM-dd"
+            val sdf = SimpleDateFormat(format, Locale.getDefault())
+            val dateTime = sdf.format(item.date_time?.toDate()?.time)
+            val time = "時間: $dateTime"
+            binding.tvDashboardInvitationItemListDateTime.text = time
             binding.executePendingBindings()
             Constant.loadPetImage(item.pet_image,binding.ivDashboardInvitationItemListImage)
 
