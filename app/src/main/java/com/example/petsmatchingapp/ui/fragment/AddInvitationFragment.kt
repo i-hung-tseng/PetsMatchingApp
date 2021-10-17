@@ -4,40 +4,48 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
-import android.widget.DatePicker
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.annotation.VisibleForTesting
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.petsmatchingapp.R
 import com.example.petsmatchingapp.databinding.FragmentAddInvitationBinding
+import com.example.petsmatchingapp.model.Banner
 import com.example.petsmatchingapp.model.Invitation
 import com.example.petsmatchingapp.ui.activity.MatchingActivity
+import com.example.petsmatchingapp.ui.adapter.MultiplePhotoAdapter
 import com.example.petsmatchingapp.utils.Constant
 import com.example.petsmatchingapp.viewmodel.AccountViewModel
 import com.example.petsmatchingapp.viewmodel.MatchingViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.Timestamp
 import com.google.firebase.database.ServerValue
+import com.zhpan.indicator.enums.IndicatorSlideMode
+import com.zhpan.indicator.enums.IndicatorStyle
 import org.koin.android.ext.android.bind
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import org.w3c.dom.Text
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
+
+
+
 
 class AddInvitationFragment : BaseFragment(),View.OnClickListener {
 
@@ -45,7 +53,6 @@ class AddInvitationFragment : BaseFragment(),View.OnClickListener {
     private lateinit var binding: FragmentAddInvitationBinding
     private val matchingViewModel: MatchingViewModel by sharedViewModel()
     private val accountViewModel: AccountViewModel by sharedViewModel()
-    private var mUri: String? = null
     private lateinit var petList: List<String>
     private lateinit var areaList: List<String>
     private var selectedPetType: String? = null
@@ -53,20 +60,34 @@ class AddInvitationFragment : BaseFragment(),View.OnClickListener {
     private lateinit var datePicker: DatePickerDialog
     private var selectedDate: Timestamp? = null
 
+    private var selectedUriList: List<Uri>? = null
+    private var selectedUploadList: List<String> = listOf()
+    private var selectedUriTypeList: List<String> = listOf()
+
 
     private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ uri ->
         if (uri.resultCode == Activity.RESULT_OK){
-            val selectedUri = uri.data?.data
+            val selectedUri = uri.data?.clipData
             if (selectedUri != null){
 
-                Constant.loadPetImage(selectedUri,binding.ivAddInvitationPetImage)
-                matchingViewModel.saveImageToFireStorage(requireActivity(),this,selectedUri)
+                val list = mutableListOf<Uri>()
+                val account = selectedUri.itemCount
+
+                for (i in 0 until account){
+                    val model = selectedUri.getItemAt(i).uri
+                    list.add(model)
+                    Timber.d("enter selectedUri $model")
+                }
+                selectedUriList = list
+                getTypeFromSelectedUri(list)
+                setAdapterWitIndicator(list)
+
 
             }
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
+//    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
@@ -83,8 +104,23 @@ class AddInvitationFragment : BaseFragment(),View.OnClickListener {
         }
 
 
+        matchingViewModel.invitation_add_state.observe( viewLifecycleOwner, androidx.lifecycle.Observer {
+            if (it == true){
+                hideDialog()
+                showSnackBar(resources.getString(R.string.add_invitation_successful),false)
+                findNavController().navigate(R.id.action_addInvitationFragment_to_navigation_home)
 
+            }else{
+                hideDialog()
+                showSnackBar(resources.getString(R.string.add_invitation_fail),true)
+            }
+            matchingViewModel.resetAddInvitationState()
+        })
 
+        matchingViewModel.saveImage_fail.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+            showSnackBar(it,true)
+            matchingViewModel.resetSaveImageState()
+        })
 
 
 
@@ -112,7 +148,6 @@ class AddInvitationFragment : BaseFragment(),View.OnClickListener {
         binding.tipAddInvitationFragmentDateTime.setOnClickListener(this)
         binding.btnAddInvitationFragmentSubmit.setOnClickListener(this)
         setSpinner()
-
         return binding.root
     }
 
@@ -125,11 +160,11 @@ class AddInvitationFragment : BaseFragment(),View.OnClickListener {
 
     private fun checkPermission(){
         if (ContextCompat.checkSelfPermission(requireActivity(),android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-            resultLauncher.launch(
-                Intent(
-                    Intent.ACTION_PICK,
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            )
+
+            val intent = Intent(Intent.ACTION_PICK,MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true)
+            resultLauncher.launch(intent)
+
         }else{
             requestPermission()
         }
@@ -139,15 +174,23 @@ class AddInvitationFragment : BaseFragment(),View.OnClickListener {
         ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),Constant.REQUEST_CODE_READ)
     }
 
+//
+//    fun saveImageSuccessful(uriList: List<Uri>){
+//        showSnackBar(resources.getString(R.string.update_pet_image_successful),false)
+//
+//
+//        val list = mutableListOf<String>()
+//        for (i in uriList){
+//            list.add(i.toString())
+//        }
+//        Timber.d("saveImage uriList: ${uriList.size}")
+//        selectedUploadList = list
+//
+//    }
 
-    fun saveImageSuccessful(uri: Uri){
-        showSnackBar(resources.getString(R.string.update_pet_image_successful),false)
-        mUri = uri.toString()
-    }
-
-    fun saveImageFail(e:String){
-        showSnackBar(e,true)
-    }
+//    fun saveImageFail(e:String){
+//        showSnackBar(e,true)
+//    }
 
     override fun onClick(v: View?) {
         when(v){
@@ -161,30 +204,27 @@ class AddInvitationFragment : BaseFragment(),View.OnClickListener {
             }
             binding.btnAddInvitationFragmentSubmit ->{
 
-               if (validDataForm()){
+
+
+               if (validDataFormAndSaveImage()){
                    showDialog(resources.getString(R.string.please_wait))
-                   val currentTime = System.currentTimeMillis()
-                   val update_time = Timestamp(Date(currentTime))
+
                    val invitation = Invitation(
                        user_id = accountViewModel.userDetail.value!!.id,
                        user_name = accountViewModel.userDetail.value?.name,
                        user_image = accountViewModel.userDetail.value?.image,
-                       pet_image = mUri!!,
                        pet_type = selectedPetType!!,
                        pet_type_description = binding.edAddInvitationPetTypeDescription.text.toString().trim(),
                        area = selectedArea!!,
                        date_place = binding.edAddInvitationDatePlace.text.toString().trim(),
                        date_time = selectedDate!!,
                        note = binding.edAddInvitationNote.text.toString().trim(),
-                       update_time = Timestamp(Date(System.currentTimeMillis()))
+                       update_time = Timestamp(Date(System.currentTimeMillis())),
                    )
-                   Timber.d("格式date_time:${ServerValue.TIMESTAMP}")
-                   Timber.d("格式selected: $selectedDate")
-                   Timber.d("格式 update_time :$update_time")
-                   Timber.d("格式 update_time_toDate: ${update_time.toDate()}")
-                   Timber.d("格式 update_time_toDate.time: ${update_time.toDate().time}")
-
-                   matchingViewModel.addInvitationToFireStore(this,invitation)
+                   selectedUriList?.let {
+                       matchingViewModel.saveImageToFireStorage(selectedUriTypeList,
+                           it,invitation)
+                   }
                }
             }
         }
@@ -221,20 +261,15 @@ class AddInvitationFragment : BaseFragment(),View.OnClickListener {
 
     }
 
-    fun addInvitationSuccess(){
-       hideDialog()
-       showSnackBar(resources.getString(R.string.add_invitation_successful),false)
-        findNavController().navigate(R.id.action_addInvitationFragment_to_navigation_home)
-    }
 
-    fun addInvitationFail(e: String){
-        hideDialog()
-        showSnackBar(e,true)
-    }
+    private fun validDataFormAndSaveImage(): Boolean{
 
-    private fun validDataForm(): Boolean{
+
+
+
         return when{
-            mUri.isNullOrBlank() ->{
+            selectedUriList.isNullOrEmpty() ->{
+                Timber.d("test enter selectedUpload: $selectedUploadList")
                 showSnackBar(resources.getString(R.string.hint_select_your_image),true)
                 false
             }
@@ -255,10 +290,6 @@ class AddInvitationFragment : BaseFragment(),View.OnClickListener {
                 false
             }
 
-//            selectedDate.isNullOrBlank() ->{
-//                showSnackBar(resources.getString(R.string.hint_enter_date_time),true)
-//                false
-//            }
 
             TextUtils.isEmpty(binding.edAddInvitationNote.text.toString().trim()) ->{
                 showSnackBar(resources.getString(R.string.hint_enter_date_note),true)
@@ -268,8 +299,31 @@ class AddInvitationFragment : BaseFragment(),View.OnClickListener {
         }
     }
 
+    private  fun setAdapterWitIndicator(list: List<Uri>){
 
+        binding.bannerImage.adapter = MultiplePhotoAdapter(list)
+        binding.indicatorAddInvitation.apply {
+            setSliderColor(Color.GRAY,ContextCompat.getColor(requireContext(),R.color.pewter_blue))
+            setSliderWidth(resources.getDimension(R.dimen.indicator_width))
+            setSlideMode(IndicatorSlideMode.SCALE)
+            setIndicatorStyle(IndicatorStyle.CIRCLE)
+                .setupWithViewPager(binding.bannerImage)
 
+        }
+
+    }
+    private fun getTypeFromSelectedUri(list: List<Uri>){
+
+        var typeList: MutableList<String> = mutableListOf()
+        for (i in 0 until list.size){
+            val model = Constant.getFileExtension(requireActivity(),list[i])
+            if (model != null) {
+                typeList.add(model)
+            }
+        }
+        selectedUriTypeList = typeList
+
+    }
 
 
 }

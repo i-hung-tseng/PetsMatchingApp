@@ -2,6 +2,7 @@ package com.example.petsmatchingapp.viewmodel
 
 import android.app.Activity
 import android.net.Uri
+import android.widget.ListView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -39,7 +40,13 @@ class AccountViewModel: ViewModel() {
     val selectedUserDetail: LiveData<User>
     get() = _selectedUserDetail
 
+    private val _updateUserDetailSuccessful = MutableLiveData<Boolean>()
+    val updateUserDetailSuccessful: LiveData<Boolean>
+    get() = _updateUserDetailSuccessful
 
+    private val _updateUserDetailFail = MutableLiveData<String>()
+    val updateUserDetailFail: LiveData<String>
+    get() = _updateUserDetailFail
 
 
     fun getCurrentUID(): String?{
@@ -134,38 +141,41 @@ class AccountViewModel: ViewModel() {
         FirebaseAuth.getInstance().signOut()
     }
 
-    fun updateUserDetailToFireStore(mHashMap: HashMap<String,Any>, fragment: EditProfileFragment ){
+    fun updateUserDetailToFireStore(mHashMap: HashMap<String,Any>){
 
         getCurrentUID()?.let {
             FirebaseFirestore.getInstance().collection(Constant.USER)
                 .document(it)
                     .update(mHashMap)
                     .addOnSuccessListener {
-                        fragment.editUserDetailSuccessful()
+                        _updateUserDetailSuccessful.postValue(true)
                     }
                     .addOnFailureListener {
-                        fragment.editUserDetailFail(it.toString())
+                        _updateUserDetailFail.postValue(it.toString())
+
                     }
         }
 
     }
 
-    fun saveImageToFireStorage(activity: Activity, fragment: EditProfileFragment,uri: Uri){
+    fun saveImageToFireStorage(mHashMap: HashMap<String,Any>,uri: Uri){
 
-        val sdf: StorageReference = FirebaseStorage.getInstance().reference.child(Constant.USER_IMAGE + "_" + System.currentTimeMillis() + "_" + Constant.getFileExtension(activity, uri))
+        val sdf: StorageReference = FirebaseStorage.getInstance().reference.child(Constant.USER_IMAGE + "_" + System.currentTimeMillis())
         sdf.putFile(uri)
                 .addOnSuccessListener {
                     it.metadata?.reference?.downloadUrl
                         ?.addOnSuccessListener {
-                            fragment.saveImageSuccessful(it)
+                            mHashMap[Constant.IMAGE] = it.toString()
+                            updateUserDetailToFireStore(mHashMap)
                         }
                         ?.addOnFailureListener {
-                            fragment.saveImageFail(it.toString())
+                            _updateUserDetailFail.postValue(it.toString())
                         }
 
                 }
                 .addOnFailureListener {
-                    fragment.saveImageFail(it.toString())
+                    _updateUserDetailFail.postValue(it.toString())
+
                 }
 
     }
@@ -179,7 +189,12 @@ class AccountViewModel: ViewModel() {
             .addOnFailureListener {
 
             }
+    }
 
-
+    fun resetUpdateSuccessful(){
+        _updateUserDetailSuccessful.postValue(null)
+    }
+    fun resetUpdateFail(){
+        _updateUserDetailFail.postValue(null)
     }
 }

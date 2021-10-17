@@ -15,6 +15,7 @@
 
 
     <RelativeLayout
+        android:id="@+id/rl_message_item_list_layout"
         android:padding="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -27,6 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toStartOf="@id/tv_item_message_me_message"
                 android:layout_alignBottom="@id/tv_item_message_me_message"
+                android:layout_alignWithParentIfMissing="false"
                 android:layout_marginEnd="5dp"
                 android:textSize="12sp"
                 tools:text = "13:00">
@@ -47,7 +49,18 @@
                 tools:text = "你今天吃飽了嗎?">
 
 
+
             </com.example.petsmatchingapp.utils.JFTextView>
+
+            <ImageView
+                android:id="@+id/iv_item_list_me"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_alignParentEnd="true"
+                android:visibility="gone"
+                android:padding="5dp">
+
+            </ImageView>
 
 
     </RelativeLayout>

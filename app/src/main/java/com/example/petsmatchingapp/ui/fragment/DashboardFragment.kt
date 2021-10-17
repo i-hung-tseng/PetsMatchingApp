@@ -1,11 +1,19 @@
 package com.example.petsmatchingapp.ui.fragment
 
+import android.icu.text.RelativeDateTimeFormatter
+import android.media.Image
 import android.os.Bundle
+import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import androidx.core.view.ViewCompat
+import androidx.core.view.doOnPreDraw
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
+import androidx.navigation.fragment.FragmentNavigator
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 
@@ -19,6 +27,7 @@ import com.example.petsmatchingapp.viewmodel.MatchingViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 
 class DashboardFragment : BaseFragment() {
@@ -36,7 +45,11 @@ class DashboardFragment : BaseFragment() {
     savedInstanceState: Bundle?
   ): View? {
 
+
     binding = FragmentDashboardBinding.inflate(inflater,container,false)
+
+
+
 
 
     accountViewModel.getUserDetail()
@@ -46,8 +59,10 @@ class DashboardFragment : BaseFragment() {
     }
 
     matchingViewModel.dashboardInvitationList.observe(viewLifecycleOwner, Observer {
-      Timber.d("dashboardInvitation ${it.size}")
       dashboardAdapter.submitList(it)
+      (view?.parent as? ViewGroup)?.doOnPreDraw {
+        startPostponedEnterTransition()
+      }
     })
 
 
@@ -74,6 +89,8 @@ class DashboardFragment : BaseFragment() {
     return binding.root
   }
 
+
+
   override fun onResume() {
     showActionBarAndBottomNavigation()
     super.onResume()
@@ -92,9 +109,10 @@ class DashboardFragment : BaseFragment() {
 
 
 
-  fun addSelectedInvitationToViewModel(invitation: Invitation) {
+  fun addSelectedInvitationToViewModel(invitation: Invitation,view: ImageView) {
     matchingViewModel.addSelectedInvitationToLiveData(invitation)
     nav.navigate(R.id.action_navigation_dashboard_to_invitationDetailFragment)
+
 
   }
 
@@ -103,6 +121,7 @@ class DashboardFragment : BaseFragment() {
     showSnackBar(e, true)
 
   }
+
 
 
   private fun showActionBarAndBottomNavigation() {
@@ -116,4 +135,6 @@ class DashboardFragment : BaseFragment() {
     activityInstance.supportActionBar?.show()
 
   }
+
+
 }

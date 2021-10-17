@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_navigation_dashboard_to_chatRoomFragment"
             app:destination="@id/chatRoomFragment" />
+        <argument
+            android:name="detailImage"
+            app:argType="string" />
     </fragment>
 
     <fragment

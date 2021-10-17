@@ -16,5 +16,5 @@ data class Message(
     val accept_user_name: String? = null,
     val accept_user_image: String? = null,
     val send_user_image: String? = null,
-
+    val image: String? = null,
 )

@@ -3,6 +3,7 @@ package com.example.petsmatchingapp.ui.adapter
 import android.util.Log.d
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -12,6 +13,7 @@ import com.example.petsmatchingapp.databinding.DashboardInvitationItemListBindin
 import com.example.petsmatchingapp.model.Invitation
 import com.example.petsmatchingapp.ui.fragment.DashboardFragment
 import com.example.petsmatchingapp.utils.Constant
+import kotlinx.android.synthetic.main.dashboard_invitation_item_list.view.*
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -30,7 +32,7 @@ class DashboardAdapter(private val fragment: DashboardFragment): ListAdapter<Inv
             val time = "時間: $dateTime"
             binding.tvDashboardInvitationItemListDateTime.text = time
             binding.executePendingBindings()
-            Constant.loadPetImage(item.pet_image,binding.ivDashboardInvitationItemListImage)
+            item.photoUriList?.get(0)?.let { Constant.loadPetImage(it,binding.ivDashboardInvitationItemListImage) }
 
         }
     }
@@ -45,8 +47,10 @@ class DashboardAdapter(private val fragment: DashboardFragment): ListAdapter<Inv
 
             val model = getItem(position)
             holder.bind(model)
+            ViewCompat.setTransitionName(holder.itemView.tv_dashboard_invitation_item_list_date_time,"image")
             holder.itemView.setOnClickListener{
-                fragment.addSelectedInvitationToViewModel(model)
+                fragment.addSelectedInvitationToViewModel(model,holder.itemView.iv_dashboard_invitation_item_list_image)
+
             }
     }
 

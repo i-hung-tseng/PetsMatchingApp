@@ -6,5 +6,5 @@ data class LastMessage(
     val display_image: String = "",
     val display_id: String = "",
     val message: String = "",
-    val send_time: Long? = 0
+    val send_time: Long? = 0,
 )

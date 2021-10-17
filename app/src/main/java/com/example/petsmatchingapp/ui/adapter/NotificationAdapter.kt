@@ -1,5 +1,6 @@
 package com.example.petsmatchingapp.ui.adapter
 
+import android.app.Application
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -30,6 +31,8 @@ class NotificationAdapter(private val fragment: NotificationsFragment):ListAdapt
     class MyViewHolder(val binding:LastMessageItemListBinding):RecyclerView.ViewHolder(binding.root){
         fun bind(item: LastMessage){
             binding.lastMessage = item
+
+
             Constant.loadUserImage(item.display_image,binding.ivLastMessageImage)
 
         }

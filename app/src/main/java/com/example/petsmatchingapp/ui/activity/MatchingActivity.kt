@@ -10,7 +10,12 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.petsmatchingapp.R
 import com.example.petsmatchingapp.viewmodel.AccountViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.iid.FirebaseInstanceIdReceiver
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.firebase.messaging.FirebaseMessagingRegistrar
+import com.google.firebase.messaging.FirebaseMessagingService
 import org.koin.androidx.viewmodel.compat.SharedViewModelCompat.sharedViewModel
+import timber.log.Timber
 
 class MatchingActivity : AppCompatActivity() {
 
@@ -29,6 +34,11 @@ class MatchingActivity : AppCompatActivity() {
         )
 
 
+        FirebaseMessaging.getInstance().token.addOnSuccessListener {
+            Timber.d("messaging token: $it")
+        }.addOnFailureListener {
+            Timber.d("messaging token fail")
+        }
 
 
         setupActionBarWithNavController(navController, appBarConfiguration)

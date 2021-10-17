@@ -1,7 +1,6 @@
 package com.example.petsmatchingapp.viewmodel
 
 import android.app.Activity
-import android.app.DownloadManager
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,12 +11,15 @@ import com.example.petsmatchingapp.ui.fragment.DashboardFragment
 import com.example.petsmatchingapp.ui.fragment.HomeFragment
 import com.example.petsmatchingapp.ui.fragment.SearchFragment
 import com.example.petsmatchingapp.utils.Constant
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import timber.log.Timber
+import java.util.*
+import kotlin.collections.HashMap
 
 class MatchingViewModel : ViewModel() {
 
@@ -40,33 +42,67 @@ class MatchingViewModel : ViewModel() {
     val allInvitationList: LiveData<List<Invitation>>
         get() = _allInvitationList
 
+    private val _invitation_add_state = MutableLiveData<Boolean>()
+    val invitation_add_state: LiveData<Boolean>
+    get() = _invitation_add_state
 
-    fun saveImageToFireStorage(activity: Activity, fragment: AddInvitationFragment, uri: Uri) {
+    private val _saveImage_fail = MutableLiveData<String>()
+    val saveImage_fail: LiveData<String>
+    get() = _saveImage_fail
 
-        val sdf: StorageReference = FirebaseStorage.getInstance().reference.child(
-            Constant.PET_IMAGE + "_" + System.currentTimeMillis() + "_" + Constant.getFileExtension(
-                activity,
-                uri
-            )
-        )
-        sdf.putFile(uri)
-            .addOnSuccessListener {
-                it.metadata?.reference?.downloadUrl
-                    ?.addOnSuccessListener {
-                        fragment.saveImageSuccessful(it)
-                    }
-                    ?.addOnFailureListener {
-                        fragment.saveImageFail(it.toString())
-                    }
 
-            }
-            .addOnFailureListener {
-                fragment.saveImageFail(it.toString())
-            }
+    fun saveImageToFireStorage( typeList: List<String>,uriList: List<Uri>,invitation: Invitation) {
+
+
+        val newList = mutableListOf<String>()
+        Timber.d("test uriList Size: ${uriList.size}")
+       for (i in 0 until typeList.size){
+           Timber.d("test enter saveImage in viewmodel i : $i")
+           val sdf: StorageReference = FirebaseStorage.getInstance().reference.child(
+               Constant.PET_IMAGE + "_" + System.currentTimeMillis() + "_" + typeList[i]
+           )
+           sdf.putFile(uriList[i])
+               .addOnSuccessListener { it ->
+                   it.metadata?.reference?.downloadUrl
+                       ?.addOnSuccessListener { uri ->
+                       val uriString = uri.toString()
+                       newList.add(uriString)
+                           if (i == uriList.size-1){
+                               val newInvitation = Invitation(
+                                   user_id = invitation.user_id,
+                                   user_name = invitation.user_name,
+                                   user_image = invitation.user_image,
+                                   pet_type = invitation.pet_type,
+                                   pet_type_description = invitation.pet_type_description,
+                                   area = invitation.area,
+                                   date_place = invitation.date_place,
+                                   date_time = invitation.date_time,
+                                   note = invitation.note,
+                                   update_time = invitation.update_time,
+                                   photoUriList = newList
+                               )
+                               addInvitationToFireStore(newInvitation)
+                           }
+
+                       }
+                       ?.addOnFailureListener {
+                        _saveImage_fail.postValue(it.toString())
+
+                       }
+
+
+               }
+               .addOnFailureListener {
+                   _saveImage_fail.postValue(it.toString())
+
+
+               }
+       }
 
     }
 
-    fun addInvitationToFireStore(fragment: AddInvitationFragment, invitation: Invitation) {
+    fun addInvitationToFireStore(invitation: Invitation) {
+        Timber.d("test addinvitation ${invitation.photoUriList?.size}")
         Firebase.firestore.collection(Constant.INVITATION)
             .add(invitation)
             .addOnSuccessListener {
@@ -74,14 +110,16 @@ class MatchingViewModel : ViewModel() {
                 mHashMap[Constant.ID] = it.id
                 it.update(mHashMap)
                     .addOnSuccessListener {
-                        fragment.addInvitationSuccess()
+                        _invitation_add_state.postValue(true)
                     }
                     .addOnFailureListener {
-                        fragment.addInvitationFail(it.toString())
+                        _invitation_add_state.postValue(false)
+
                     }
             }
             .addOnFailureListener {
-                fragment.addInvitationFail(it.toString())
+                _invitation_add_state.postValue(false)
+
             }
     }
 
@@ -349,5 +387,11 @@ class MatchingViewModel : ViewModel() {
 
     }
 
+    fun resetAddInvitationState(){
+        _invitation_add_state.postValue(null)
+    }
 
+    fun resetSaveImageState(){
+        _saveImage_fail.postValue(null)
+    }
 }

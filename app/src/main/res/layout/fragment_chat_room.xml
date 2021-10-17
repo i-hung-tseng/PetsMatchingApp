@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/chat_room_background"
@@ -45,14 +46,17 @@
     </androidx.recyclerview.widget.RecyclerView>
 
 
+
+
+
     <LinearLayout
         android:id="@+id/ll_chat_room_ed_word"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:orientation="horizontal"
-        android:gravity="end"
+        android:gravity="start"
         android:background="@color/white">
 
 
@@ -65,24 +69,45 @@
             <com.example.petsmatchingapp.utils.JFEditText
                 android:id="@+id/ed_chat_room_input_message"
                 android:layout_width="match_parent"
-                android:background="@color/grey_light"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:paddingTop="3dp"
+                android:background="@drawable/chat_edit_background">
+
 
             </com.example.petsmatchingapp.utils.JFEditText>
 
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <ImageButton
+            android:id="@+id/btn_camera"
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:src="@drawable/ic_baseline_insert_photo_24">
+
+        </ImageButton>
+
+        <ImageView
+            android:id="@+id/iv_chat_room_selected_photo"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"/>
+
+
 
             <ImageButton
                 android:id="@+id/btn_send"
                 android:layout_weight="1"
                 android:layout_width="wrap_content"
+                android:backgroundTint="@color/white"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_baseline_send_24">
 
             </ImageButton>
-
 
 
 

@@ -43,6 +43,19 @@
             android:background="@drawable/message_backgorund_other"
             tools:text = "今天我吃飽了喔，我想應該也還沒吃飽啦"/>
 
+        <ImageView
+            android:id="@+id/iv_list_item_other_image"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="5dp"
+            android:padding="5dp"
+            android:visibility="gone"
+            android:layout_toEndOf="@id/iv_item_message_other_image"
+            android:layout_alignTop="@id/iv_item_message_other_image"/>
+
+
+
+
         <com.example.petsmatchingapp.utils.JFTextView
             android:id="@+id/item_message_other_time"
             android:layout_width="wrap_content"

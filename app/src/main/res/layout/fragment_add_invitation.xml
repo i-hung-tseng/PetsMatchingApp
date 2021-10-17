@@ -52,13 +52,19 @@
                     android:background="@color/grey_light"
                     app:layout_constraintTop_toTopOf="parent">
 
-                    <ImageView
-                        android:id="@+id/iv_add_invitation_pet_image"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="fitXY">
 
-                    </ImageView>
+                    <androidx.viewpager2.widget.ViewPager2
+                        android:id="@+id/banner_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"/>
+
+                   <com.zhpan.indicator.IndicatorView
+                       android:id="@+id/indicator_add_invitation"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_gravity="bottom|center"
+                       android:layout_margin="10dp"/>
+
 
                     <ImageView
                         android:id="@+id/iv_add_invitation_camera"

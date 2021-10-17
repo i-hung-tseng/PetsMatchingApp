@@ -56,6 +56,8 @@
 
 
     <string name="add_invitation_successful">上傳邀約成功!</string>
+    <string name="add_invitation_fail">上傳邀約失敗，請再試一次</string>
+
 
 
     <string name="alertDialog_title_do_you_want_delete">刪除約散</string>
@@ -126,5 +128,15 @@
 
 
     <string name="msg_choose_your_result_sort">請選擇排序方法</string>
+
+    <string name="transition_photo">photo %d</string>
+    <string name="transition_type">type %d</string>
+    <string name="transition_place">place %d</string>
+    <string name="transition_time">time %d</string>
+
+    <string name="already_selected_photo">已選擇照片</string>
+    <string name="already_send_photo">已傳送照片</string>
+    <string name="already_accept_photo">$d 傳送一張照片</string>
+
 
 </resources>

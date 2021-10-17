@@ -43,14 +43,33 @@
     </androidx.appcompat.widget.Toolbar>
 
 
-    <ImageView
-        android:id="@+id/iv_invitation_detail_image"
+
+    <FrameLayout
+        android:id="@+id/fl_invitation_detail"
         android:layout_width="match_parent"
-        android:scaleType="center"
         android:layout_height="@dimen/image_height"
         app:layout_constraintTop_toBottomOf="@id/toolbar_invitation_detail_fragment"
         app:layout_constraintStart_toStartOf="parent">
-    </ImageView>
+
+
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/banner_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+        <com.zhpan.indicator.IndicatorView
+            android:id="@+id/indicator_add_invitation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_margin="10dp"/>
+
+
+
+    </FrameLayout>
+
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -58,7 +77,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toTopOf="@id/btn_invitation_detail_submit"
-        app:layout_constraintTop_toBottomOf="@id/iv_invitation_detail_image"
+        app:layout_constraintTop_toBottomOf="@id/fl_invitation_detail"
         app:layout_constraintVertical_bias="1.0"
         tools:layout_editor_absoluteX="0dp">
 

@@ -39,6 +39,7 @@ object Constant {
     const val DATE_TIME = "date_time"
 
     const val LAST_MESSAGE = "last_message"
+    const val CHAT_IMAGE = "chat_image"
 
 
     fun loadUserImage(url: Any, v:ImageView){
@@ -63,4 +64,5 @@ object Constant {
     fun getFileExtension(activity: Activity, uri: Uri): String?{
         return MimeTypeMap.getSingleton().getExtensionFromMimeType(activity.contentResolver.getType(uri))
     }
+
 }

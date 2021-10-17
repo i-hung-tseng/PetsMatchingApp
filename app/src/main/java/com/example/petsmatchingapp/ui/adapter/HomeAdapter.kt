@@ -1,12 +1,10 @@
 package com.example.petsmatchingapp.ui.adapter
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.petsmatchingapp.databinding.FragmentAddInvitationBinding
 import com.example.petsmatchingapp.databinding.HomeInvitationItemListBinding
 import com.example.petsmatchingapp.model.Invitation
 import com.example.petsmatchingapp.ui.fragment.HomeFragment
@@ -38,7 +36,7 @@ class HomeAdapter(val fragment: HomeFragment): ListAdapter<Invitation, HomeAdapt
             val stampToTime = item.date_time?.toDate()?.time
             val time = "時間: " + sdf.format(stampToTime)
             binding.tvHomeInvitationItemListDateTime.text = time
-            Constant.loadPetImage(item.pet_image,binding.ivHomeInvitationItemListImage)
+            item.photoUriList?.get(0)?.let { Constant.loadPetImage(it,binding.ivHomeInvitationItemListImage) }
             binding.executePendingBindings()
 
         }

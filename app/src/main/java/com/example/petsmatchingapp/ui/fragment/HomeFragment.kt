@@ -4,24 +4,20 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.*
-import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.petsmatchingapp.R
 import com.example.petsmatchingapp.databinding.FragmentHomeBinding
 import com.example.petsmatchingapp.model.Invitation
 import com.example.petsmatchingapp.ui.activity.MatchingActivity
 import com.example.petsmatchingapp.ui.adapter.HomeAdapter
+import com.example.petsmatchingapp.ui.adapter.MultiplePhotoAdapter
 import com.example.petsmatchingapp.viewmodel.AccountViewModel
 import com.example.petsmatchingapp.viewmodel.MatchingViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import javax.net.ssl.ManagerFactoryParameters
 
 
 class HomeFragment : BaseFragment() {
