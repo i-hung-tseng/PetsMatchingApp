@@ -21,7 +21,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class ChatRoomAdapter(private val context: Context): ListAdapter<Message, RecyclerView.ViewHolder>(DiffCallback) {
+class ChatRoomAdapter(): ListAdapter<Message, RecyclerView.ViewHolder>(DiffCallback) {
 
 
     private val MESSAGE_TYPE_LEFT = 0
@@ -43,11 +43,12 @@ class ChatRoomAdapter(private val context: Context): ListAdapter<Message, Recycl
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        if (viewType == MESSAGE_TYPE_RIGHT) {
 
-            return MyMessageViewHolder(MessageItemListMeBinding.inflate(LayoutInflater.from(parent.context)))
+        return if (viewType == MESSAGE_TYPE_RIGHT) {
+
+            MyMessageViewHolder(MessageItemListMeBinding.inflate(LayoutInflater.from(parent.context)))
         } else {
-            return OtherMessageViewHolder(
+            OtherMessageViewHolder(
                 MessageListItemOtherBinding.inflate(
                     LayoutInflater.from(
                         parent.context

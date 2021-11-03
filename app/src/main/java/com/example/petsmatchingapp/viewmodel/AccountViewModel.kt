@@ -8,13 +8,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.petsmatchingapp.model.CurrentUser
 import com.example.petsmatchingapp.model.User
 import com.example.petsmatchingapp.ui.fragment.EditProfileFragment
 import com.example.petsmatchingapp.ui.fragment.ForgotAccountFragment
 import com.example.petsmatchingapp.ui.fragment.LoginFragment
 import com.example.petsmatchingapp.ui.fragment.RegisterFragment
 import com.example.petsmatchingapp.utils.Constant
+import com.example.petsmatchingapp.utils.SingleLiveEvent
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
@@ -25,6 +28,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.IOException
+import java.time.zone.ZoneOffsetTransitionRule
 
 class AccountViewModel: ViewModel() {
 
@@ -32,16 +36,22 @@ class AccountViewModel: ViewModel() {
 
 
     private val _userDetail = MutableLiveData<User>()
-    val userDetail: LiveData<User>
-    get() = _userDetail
+    val userDetail: LiveData<User> = _userDetail
 
+    private val _loginState = SingleLiveEvent<String>()
+    val loginState: SingleLiveEvent<String> = _loginState
+
+    private val _registerState = SingleLiveEvent<String>()
+    val registerState: SingleLiveEvent<String> = _registerState
+
+    private val _sendEmailToReset = SingleLiveEvent<String>()
+    val sendEmailToReset: SingleLiveEvent<String> = _sendEmailToReset
 
     private val _selectedUserDetail = MutableLiveData<User>()
-    val selectedUserDetail: LiveData<User>
-    get() = _selectedUserDetail
+    val selectedUserDetail: LiveData<User> = _selectedUserDetail
 
-    private val _updateUserDetailSuccessful = MutableLiveData<Boolean>()
-    val updateUserDetailSuccessful: LiveData<Boolean>
+    private val _updateUserDetailSuccessful = SingleLiveEvent<Boolean>()
+    val updateUserDetailSuccessful: SingleLiveEvent<Boolean>
     get() = _updateUserDetailSuccessful
 
     private val _updateUserDetailFail = MutableLiveData<String>()
@@ -49,87 +59,87 @@ class AccountViewModel: ViewModel() {
     get() = _updateUserDetailFail
 
 
-    fun getCurrentUID(): String?{
-        return FirebaseAuth.getInstance().currentUser?.uid
+    // TODO: 2021/10/29 丟不同的資料，return 不同的 REF
+    private fun getFireStoreCollection(): CollectionReference {
+            return Firebase.firestore.collection(Constant.USER)
     }
 
 
 
+    fun getCurrentUID(){
+        CurrentUser.currentUser = FirebaseAuth.getInstance().currentUser
+    }
 
 
 
-
-    fun loginWithEmailAndPassword(fragment: LoginFragment, email: String, paw: String){
+    fun loginWithEmailAndPassword( email: String, paw: String){
 
 
         FirebaseAuth.getInstance().signInWithEmailAndPassword(email,paw)
                 .addOnSuccessListener {
-                    fragment.loginSuccessful()
+                    _loginState.postValue(Constant.TRUE)
                 }
                 .addOnFailureListener {
-                    Timber.d("Error while logging cause $it")
-                    fragment.loginFail(it.toString())
+                    _loginState.postValue(it.toString())
                 }
     }
 
-    fun registerWithEmailAndPassword(fragment: RegisterFragment, user: User){
+    fun registerWithEmailAndPassword(user: User){
 
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(user.email,user.password)
                     .addOnSuccessListener {
-
                         val newUser = User(
                             name = user.name,
                             email = user.email,
                             password = user.password,
                             id = it.user!!.uid
                         )
-
-                        addUserDetailsToFireStore(fragment,newUser)
+                        addUserDetailsToFireStore(newUser)
                     }
                     .addOnFailureListener {
-                        fragment.registerFail(it.toString())
+                        _registerState.postValue(it.toString())
                 }
     }
 
-    private fun addUserDetailsToFireStore(fragment: RegisterFragment, user: User){
+    private fun addUserDetailsToFireStore(user: User){
 
            //這邊創立 Firestore的 instance，並且collection內指定集合為user，集合裡面填string，我們用Constant來確保每次呼叫都不會拼錯字
-
-            FirebaseFirestore.getInstance().collection(Constant.USER)
+            getFireStoreCollection()
             //這邊指定 document的id為剛剛auth回傳的 uid
             .document(user.id)
             .set(user, SetOptions.merge())
             .addOnSuccessListener{
-                fragment.registerSuccessful()
+                _registerState.postValue(Constant.TRUE)
             }
             .addOnFailureListener{
-                fragment.registerFail(it.toString())
+                _registerState.postValue(it.toString())
             }
 
     }
 
-    fun sendEmailToResetPassword(fragment: ForgotAccountFragment,email: String){
+    fun sendEmailToResetPassword(email: String){
 
 
                 FirebaseAuth.getInstance().sendPasswordResetEmail(email)
                     .addOnSuccessListener {
-                        fragment.sendEmailSuccessful()
+                        _sendEmailToReset.postValue(Constant.TRUE)
                     }
                     .addOnFailureListener {
-                        fragment.sendEmailFail(it.toString())
+                        _sendEmailToReset.postValue(it.toString())
                     }
 
         }
 
 
+    // TODO: 2021/11/1 這個不太好，代表誰都可以讀別人的個人資料
     fun getUserDetail(){
-
-        getCurrentUID()?.let {
-            FirebaseFirestore.getInstance().collection(Constant.USER)
+        CurrentUser.currentUser?.uid?.let {
+                 getFireStoreCollection()
                 .document(it)
                 .get()
                 .addOnSuccessListener {
                     _userDetail.postValue(it.toObject(User::class.java))
+                    Timber.d("測試 ${it.toObject(User::class.java)}")
                 }
                 .addOnFailureListener {
                     Timber.d("Error while getUserDetail cause$it")
@@ -143,15 +153,17 @@ class AccountViewModel: ViewModel() {
 
     fun updateUserDetailToFireStore(mHashMap: HashMap<String,Any>){
 
-        getCurrentUID()?.let {
-            FirebaseFirestore.getInstance().collection(Constant.USER)
+        CurrentUser.currentUser?.uid?.let {
+            getFireStoreCollection()
                 .document(it)
                     .update(mHashMap)
                     .addOnSuccessListener {
+                        Timber.d("測試 updateUserDetailToFireStore")
                         _updateUserDetailSuccessful.postValue(true)
                     }
                     .addOnFailureListener {
                         _updateUserDetailFail.postValue(it.toString())
+                        Timber.d("測試 updateUserDetailToFireStore fail $it")
 
                     }
         }
@@ -182,7 +194,7 @@ class AccountViewModel: ViewModel() {
 
     fun findUserDetailByID(user_id: String){
 
-        Firebase.firestore.collection(Constant.USER).document(user_id).get()
+        getFireStoreCollection().document(user_id).get()
             .addOnSuccessListener {
                 _selectedUserDetail.postValue(it.toObject(User::class.java))
             }

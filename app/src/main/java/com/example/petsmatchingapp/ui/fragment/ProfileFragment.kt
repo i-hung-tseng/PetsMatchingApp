@@ -32,7 +32,6 @@ class ProfileFragment : BaseFragment(),View.OnClickListener {
         savedInstanceState: Bundle?
     ): View? {
 
-        dismissActivityActionBarAndBottomNavigationView()
 
         binding = FragmentProfileBinding.inflate(inflater)
         binding.toolbarProfileFragment.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
@@ -56,12 +55,7 @@ class ProfileFragment : BaseFragment(),View.OnClickListener {
     }
 
 
-    private fun dismissActivityActionBarAndBottomNavigationView(){
-        val activityInstance = this.activity as MatchingActivity
-        activityInstance.supportActionBar?.hide()
-        activityInstance.findViewById<BottomNavigationView>(R.id.nav_view).visibility = View.GONE
 
-    }
 
     override fun onClick(v: View?) {
         when(v){

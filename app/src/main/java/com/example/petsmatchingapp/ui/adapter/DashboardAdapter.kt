@@ -18,18 +18,16 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DashboardAdapter(private val fragment: DashboardFragment): ListAdapter<Invitation, DashboardAdapter.DashboardViewHolder>(DiffCallback){
+class DashboardAdapter(): ListAdapter<Invitation, DashboardAdapter.DashboardViewHolder>(DiffCallback){
 
 
-
+    var clickEvent:(invitation: Invitation) -> Unit = { }
 
     class DashboardViewHolder(val binding: DashboardInvitationItemListBinding): RecyclerView.ViewHolder(binding.root){
         fun bind(item: Invitation){
             binding.invitation = item
-            val format = "yyyy-MM-dd"
-            val sdf = SimpleDateFormat(format, Locale.getDefault())
-            val dateTime = sdf.format(item.date_time?.toDate()?.time)
-            val time = "時間: $dateTime"
+            val dateTime = SimpleDateFormat( "yyyy-MM-dd", Locale.getDefault()).format(item.date_time?.toDate()?.time)
+            val time = binding.root.context.resources.getString(R.string.time_form,dateTime)
             binding.tvDashboardInvitationItemListDateTime.text = time
             binding.executePendingBindings()
             item.photoUriList?.get(0)?.let { Constant.loadPetImage(it,binding.ivDashboardInvitationItemListImage) }
@@ -49,9 +47,11 @@ class DashboardAdapter(private val fragment: DashboardFragment): ListAdapter<Inv
             holder.bind(model)
             ViewCompat.setTransitionName(holder.itemView.tv_dashboard_invitation_item_list_date_time,"image")
             holder.itemView.setOnClickListener{
-                fragment.addSelectedInvitationToViewModel(model,holder.itemView.iv_dashboard_invitation_item_list_image)
-
+//                fragment.addSelectedInvitationToViewModel(model,holder.itemView.iv_dashboard_invitation_item_list_image)
+                clickEvent(model)
             }
+
+
     }
 
     companion object DiffCallback: DiffUtil.ItemCallback<Invitation>(){

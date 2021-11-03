@@ -16,4 +16,14 @@
         <item name="android:windowContentTransitions">true</item>
 
     </style>
+
+    <style name="big_button" parent="Widget.AppCompat.Button">
+        <item name="android:color">@color/grey_light</item>
+        <item name="android:textSize">99sp</item>
+    </style>
+
+    <style name="other" parent="big_button">
+        <item name="android:background">@drawable/chat_edit_background</item>
+        <item name="android:color">@color/pewter_blue</item>
+    </style>
 </resources>

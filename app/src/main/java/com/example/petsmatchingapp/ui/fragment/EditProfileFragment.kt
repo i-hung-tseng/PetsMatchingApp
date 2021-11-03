@@ -30,12 +30,14 @@ import java.lang.Exception
 import java.util.jar.Manifest
 
 
+
 class EditProfileFragment : BaseFragment(),View.OnClickListener {
 
 
     private val accountViewModel: AccountViewModel by sharedViewModel()
     private lateinit var binding: FragmentEditProfileBinding
     var selectedUri: Uri? = null
+
 
 
     private val startForProfileImageResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
@@ -53,14 +55,12 @@ class EditProfileFragment : BaseFragment(),View.OnClickListener {
         }
     }
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
 
-
         binding = FragmentEditProfileBinding.inflate(inflater)
 
-        accountViewModel.userDetail.observe(viewLifecycleOwner, Observer {
+        accountViewModel.userDetail.observe(viewLifecycleOwner, {
             Constant.loadUserImage(it.image,binding.ivEditProfileImage)
             if (it.area != ""){
                 binding.edEditArea.setText(it.area)
@@ -73,16 +73,17 @@ class EditProfileFragment : BaseFragment(),View.OnClickListener {
             }
         })
 
-        accountViewModel.updateUserDetailSuccessful.observe(viewLifecycleOwner, Observer {
+        accountViewModel.updateUserDetailSuccessful.observe(viewLifecycleOwner, {
+            Timber.d("觀察 update")
             if (it == true){
                 showSnackBar(resources.getString(R.string.update_user_profile_successful),false)
                 hideDialog()
                 accountViewModel.getUserDetail()
-                accountViewModel.resetUpdateSuccessful()
+//                accountViewModel.resetUpdateSuccessful()
             }
         })
 
-        accountViewModel.updateUserDetailFail.observe(viewLifecycleOwner, Observer {
+        accountViewModel.updateUserDetailFail.observe(viewLifecycleOwner,{
             hideDialog()
 
             showSnackBar(it,true)
@@ -153,15 +154,20 @@ class EditProfileFragment : BaseFragment(),View.OnClickListener {
                    val mHashMap = HashMap<String,Any>()
                    mHashMap[Constant.NAME] = binding.edEditProfileName.text.toString().trim()
                    var gender = ""
-                   if (binding.rbMan.isChecked){
-                       gender = Constant.MAN
+                   gender = if (binding.rbMan.isChecked){
+                       Constant.MAN
                    }else{
-                       gender = Constant.FEMALE
+                       Constant.FEMALE
                    }
                    mHashMap[Constant.GENDER] = gender
                    mHashMap[Constant.PROFILE_COMPLETED] = true
                    mHashMap[Constant.AREA] = binding.edEditArea.text.toString().trim()
-                   selectedUri?.let { accountViewModel.saveImageToFireStorage(mHashMap, it) }
+                   if (selectedUri != null){
+                       accountViewModel.saveImageToFireStorage(mHashMap, selectedUri!!)
+                   }else{
+                       accountViewModel.updateUserDetailToFireStore(mHashMap)
+
+                   }
 
                }
            }

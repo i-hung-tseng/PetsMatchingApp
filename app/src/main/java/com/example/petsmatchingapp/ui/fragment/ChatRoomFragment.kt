@@ -3,11 +3,8 @@ package com.example.petsmatchingapp.ui.fragment
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
-import android.text.Editable
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
@@ -28,7 +25,6 @@ import com.github.dhaval2404.imagepicker.ImagePicker
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.database.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
-import timber.log.Timber
 
 
 class ChatRoomFragment : BaseFragment() {
@@ -40,7 +36,6 @@ class ChatRoomFragment : BaseFragment() {
     private lateinit var chatAdapter: ChatRoomAdapter
     private var selectedUri: Uri? = null
     private lateinit var type: String
-
 
 
     private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { uri ->
@@ -62,19 +57,13 @@ class ChatRoomFragment : BaseFragment() {
         }
     }
 
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
-        chatViewModel.messageList.observe(viewLifecycleOwner, Observer {
+        chatViewModel.messageList.observe(viewLifecycleOwner,  {
             chatAdapter.submitList(it)
-
         })
-
 
 
         binding = FragmentChatRoomBinding.inflate(inflater)
@@ -85,7 +74,6 @@ class ChatRoomFragment : BaseFragment() {
                 sendMessageAndSaveLastMessage()
             }
         }
-
 
         binding.btnCamera.setOnClickListener{
             ImagePicker.with(this)
@@ -102,6 +90,8 @@ class ChatRoomFragment : BaseFragment() {
         binding.ivChatRoomSelectedPhoto.setOnClickListener {
             setAlertDialog()
         }
+
+        //背景顏色透明
         binding.btnSend.background.alpha = 0
 
 
@@ -113,12 +103,12 @@ class ChatRoomFragment : BaseFragment() {
             requireActivity().onBackPressed()
         }
 
+
         chatViewModel.imageFail.observe(viewLifecycleOwner, Observer {
             showSnackBar(it,true)
             chatViewModel.resetImageFail()
         })
 
-        dismissActivityActionBarAndBottomNavigationView()
 
         return binding.root
     }
@@ -147,13 +137,6 @@ class ChatRoomFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
-
-    private fun dismissActivityActionBarAndBottomNavigationView() {
-        val activityInstance = this.activity as MatchingActivity
-        activityInstance.supportActionBar?.hide()
-        activityInstance.findViewById<BottomNavigationView>(R.id.nav_view).visibility = View.GONE
-
-    }
 
 
     private fun sendMessageAndSaveLastMessage() {
@@ -202,7 +185,7 @@ class ChatRoomFragment : BaseFragment() {
     }
 
     private fun setAdapter() {
-        chatAdapter = ChatRoomAdapter(requireContext())
+        chatAdapter = ChatRoomAdapter()
         binding.rvChatRoom.adapter = chatAdapter
         val linerLayout = LinearLayoutManager(requireContext())
         linerLayout.reverseLayout = true
@@ -228,11 +211,8 @@ class ChatRoomFragment : BaseFragment() {
                 }
 
             })
-            setNegativeButton("讓我再想一下",object : DialogInterface.OnClickListener{
-                override fun onClick(dialog: DialogInterface?, which: Int) {
-                    dialog?.dismiss()
-                }
-            })
+            setNegativeButton("讓我再想一下"
+            ) { dialog, _ -> dialog?.dismiss() }
         }
 
       val alertDialog = builder.create()

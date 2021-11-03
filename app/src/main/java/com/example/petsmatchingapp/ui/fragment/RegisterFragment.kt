@@ -11,21 +11,23 @@ import androidx.navigation.fragment.findNavController
 import com.example.petsmatchingapp.R
 import com.example.petsmatchingapp.databinding.FragmentRegisterBinding
 import com.example.petsmatchingapp.model.User
+import com.example.petsmatchingapp.utils.Constant
 import com.example.petsmatchingapp.viewmodel.AccountViewModel
+import org.koin.android.ext.android.bind
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 
-class RegisterFragment : BaseFragment(),View.OnClickListener {
+class RegisterFragment : BaseFragment() {
 
 
     private lateinit var binding: FragmentRegisterBinding
     private lateinit var nav: NavController
     private val accountViewModel: AccountViewModel by sharedViewModel()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-
-
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
 
         binding = FragmentRegisterBinding.inflate(inflater)
@@ -35,74 +37,74 @@ class RegisterFragment : BaseFragment(),View.OnClickListener {
             requireActivity().onBackPressed()
         }
 
-        binding.btnRegister.setOnClickListener(this)
-        binding.tvRegisterLogin.setOnClickListener(this)
+        setClickEvent()
+        accountViewModel.registerState.observe(viewLifecycleOwner,{
+            if (it == Constant.TRUE){
+                hideDialog()
+                showSnackBar(resources.getString(R.string.register_success), false)
+                nav.navigate(R.id.action_registerFragment_to_loginFragment)
+            }else{
+                hideDialog()
+                showSnackBar(it, true)
+
+            }
+        })
+
+
         return binding.root
     }
 
+    private fun setClickEvent() {
+        binding.btnRegister.setOnClickListener {
 
-    private fun validDataForm(): Boolean{
+            if (validDataForm()) {
+                showDialog(resources.getString(R.string.please_wait))
+                val user = User(
+                    name = binding.edRegisterName.text.toString().trim(),
+                    email = binding.edRegisterEmail.text.toString().trim(),
+                    password = binding.edRegisterPassword.text.toString().trim(),
+                )
 
-        return when{
+                accountViewModel.registerWithEmailAndPassword( user)
 
-            TextUtils.isEmpty(binding.edRegisterName.text.toString().trim()) -> {
-                showSnackBar(resources.getString(R.string.hint_enter_your_name),true)
-                return false
             }
-            TextUtils.isEmpty(binding.edRegisterEmail.text.toString().trim()) -> {
-                showSnackBar(resources.getString(R.string.hint_enter_your_email),true)
-                return false
-            }
-            TextUtils.isEmpty(binding.edRegisterPassword.text.toString().trim()) -> {
-                showSnackBar(resources.getString(R.string.hint_enter_your_password),true)
-                return false
-            }
-            TextUtils.isEmpty(binding.edRegisterPasswordAgain.text.toString().trim()) -> {
-                showSnackBar(resources.getString(R.string.hint_enter_again_password),true)
-                return false
-            }
-
-            binding.edRegisterPasswordAgain.text.toString().trim() != binding.edRegisterPassword.text.toString().trim() ->{
-                showSnackBar(resources.getString(R.string.hint_do_not_enter_same_password),true)
-                return false
-            }
-
-            else -> true
 
         }
-    }
-
-    override fun onClick(v: View?) {
-        when(v){
-            binding.btnRegister -> {
-                if (validDataForm()){
-                    showDialog(resources.getString(R.string.please_wait))
-                    val user = User(
-                        name = binding.edRegisterName.text.toString().trim(),
-                        email = binding.edRegisterEmail.text.toString().trim(),
-                        password = binding.edRegisterPassword.text.toString().trim(),
-                    )
-
-                    accountViewModel.registerWithEmailAndPassword(this,user)
-
-                }
-            }
-            binding.tvRegisterLogin -> {
-                nav.navigate(R.id.action_registerFragment_to_loginFragment)
-            }
+        binding.tvRegisterLogin.setOnClickListener {
+            nav.navigate(R.id.action_registerFragment_to_loginFragment)
         }
     }
 
 
-    fun registerSuccessful(){
-        hideDialog()
-        showSnackBar(resources.getString(R.string.register_success),false)
-        nav.navigate(R.id.action_registerFragment_to_loginFragment)
-    }
+    private fun validDataForm(): Boolean {
+        val view = arrayOf(
+            binding.edRegisterName,
+            binding.edRegisterEmail,
+            binding.edRegisterPassword,
+            binding.edRegisterPasswordAgain
+        )
+        val snackContent = arrayOf(
+            R.string.hint_enter_your_name,
+            R.string.hint_enter_your_email,
+            R.string.hint_enter_your_password,
+            R.string.hint_enter_again_password
+        )
 
-    fun registerFail(e: String){
-        hideDialog()
-        showSnackBar(e,true)
+        view.forEachIndexed { index, jfEditText ->
+
+            if (jfEditText.text.isNullOrBlank()) {
+                showSnackBar(resources.getString(snackContent[index]), true)
+                return false
+            }
+        }
+
+        return if (binding.edRegisterPassword.text.toString() != binding.edRegisterPasswordAgain.text.toString()) {
+            showSnackBar(resources.getString(R.string.hint_do_not_enter_same_password), true)
+            false
+        } else {
+            true
+        }
+
     }
 
 }

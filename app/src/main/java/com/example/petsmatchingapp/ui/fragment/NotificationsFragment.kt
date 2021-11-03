@@ -58,7 +58,7 @@ class NotificationsFragment : Fragment() {
   }
 
   override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    chatViewModel.getLastMessage(accountViewModel.userDetail.value!!.id)
+//    chatViewModel.getLastMessage(accountViewModel.userDetail.value!!.id)
     super.onViewCreated(view, savedInstanceState)
   }
 

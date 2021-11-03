@@ -138,5 +138,18 @@
     <string name="already_send_photo">已傳送照片</string>
     <string name="already_accept_photo">$d 傳送一張照片</string>
 
+    <string name="string_test1">他是%1$2d</string>
+    <string name="string_test2">他是%1$d</string>
+    <string name="string_test3">他是%1$d</string>
+    <string name="string_test4">他是%1$d,他不是%2$d</string>
+    <string name="string_test5">他是%1$d,他不是%3$4d</string>
+
+    <string name="combine_test1">他是%1$s，今天%2$2d 歲</string>
+    <string name="string_string_test">他是%1$s，今天是%2$1s</string>
+
+    <string name="float_test1">分數是%1$f</string>
+    <string name="float_test2">分數是%1$.5f</string>
+
+    <string name="time_form">時間%1$s</string>
 
 </resources>

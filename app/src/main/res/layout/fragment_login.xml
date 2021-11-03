@@ -121,35 +121,36 @@
             android:layout_marginTop="30dp"/>
 
 
-
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/btn_login"
-            android:orientation="horizontal"
-            android:gravity="center"
             android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/btn_login">
 
 
             <com.example.petsmatchingapp.utils.JFTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/login_don_have_account"
-                android:textSize="@dimen/hint_word_textSize"/>
+                android:textSize="@dimen/hint_word_textSize" />
 
             <com.example.petsmatchingapp.utils.JFTextView
                 android:id="@+id/tv_register"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/register"
-                android:textStyle="bold"
-                android:textSize="@dimen/hint_word_textSize"/>
-
+                android:textSize="@dimen/hint_word_textSize"
+                android:textStyle="bold" />
 
 
         </LinearLayout>
+
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

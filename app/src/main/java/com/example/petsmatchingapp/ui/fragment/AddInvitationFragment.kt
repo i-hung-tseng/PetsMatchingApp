@@ -92,11 +92,11 @@ class AddInvitationFragment : BaseFragment(),View.OnClickListener {
                               savedInstanceState: Bundle?): View? {
 
 
-        dismissActivityActionBarAndBottomNavigationView()
 
 
 
         binding = FragmentAddInvitationBinding.inflate(inflater)
+
 
         binding.toolbarAddInvitationFragment.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
         binding.toolbarAddInvitationFragment.setNavigationOnClickListener {
@@ -104,7 +104,8 @@ class AddInvitationFragment : BaseFragment(),View.OnClickListener {
         }
 
 
-        matchingViewModel.invitation_add_state.observe( viewLifecycleOwner, androidx.lifecycle.Observer {
+        matchingViewModel.invitation_add_state.observe( viewLifecycleOwner, {
+            Timber.d("觀察 invitation_add_state it: $it")
             if (it == true){
                 hideDialog()
                 showSnackBar(resources.getString(R.string.add_invitation_successful),false)
@@ -114,10 +115,10 @@ class AddInvitationFragment : BaseFragment(),View.OnClickListener {
                 hideDialog()
                 showSnackBar(resources.getString(R.string.add_invitation_fail),true)
             }
-            matchingViewModel.resetAddInvitationState()
+//            matchingViewModel.resetAddInvitationState()
         })
 
-        matchingViewModel.saveImage_fail.observe(viewLifecycleOwner, androidx.lifecycle.Observer {
+        matchingViewModel.saveImage_fail.observe(viewLifecycleOwner, {
             showSnackBar(it,true)
             matchingViewModel.resetSaveImageState()
         })
@@ -151,12 +152,7 @@ class AddInvitationFragment : BaseFragment(),View.OnClickListener {
         return binding.root
     }
 
-    private fun dismissActivityActionBarAndBottomNavigationView(){
-        val activityInstance = this.activity as MatchingActivity
-        activityInstance.supportActionBar?.hide()
-        activityInstance.findViewById<BottomNavigationView>(R.id.nav_view).visibility = View.GONE
 
-    }
 
     private fun checkPermission(){
         if (ContextCompat.checkSelfPermission(requireActivity(),android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
@@ -196,7 +192,6 @@ class AddInvitationFragment : BaseFragment(),View.OnClickListener {
         when(v){
             binding.ivAddInvitationCamera -> {
                 checkPermission()
-                Timber.d("時間 $selectedDate")
             }
             binding.edAddInvitationDateTime -> {
                 datePicker.show()

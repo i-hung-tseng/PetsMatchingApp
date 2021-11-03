@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.petsmatchingapp.model.CurrentUser
 import com.example.petsmatchingapp.model.Invitation
 import com.example.petsmatchingapp.model.LastMessage
 import com.example.petsmatchingapp.model.Message
@@ -45,6 +46,10 @@ class ChatViewModel:ViewModel() {
     val imageFail: LiveData<String>
     get() = _imageFail
 
+
+    init {
+        getLastMessage()
+    }
 
     fun sendMessage(message: Message){
 
@@ -126,29 +131,36 @@ class ChatViewModel:ViewModel() {
 
 
 
-    fun getLastMessage(user_id: String){
+    fun getLastMessage(){
 
-        FirebaseDatabase.getInstance().reference.child(Constant.LAST_MESSAGE).child(user_id)
-            .addValueEventListener(object : ValueEventListener{
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val newList: MutableList<LastMessage> = mutableListOf()
-                    for (eachPerson in snapshot.children){
-                        val lastMessage = eachPerson.getValue(LastMessage::class.java)
-                        lastMessage?.let {
-                            newList.add(it)
+        CurrentUser.currentUser?.uid?.let {
+            FirebaseDatabase.getInstance().reference.child(Constant.LAST_MESSAGE).child(it)
+                .addValueEventListener(object : ValueEventListener{
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val newList: MutableList<LastMessage> = mutableListOf()
+                        for (eachPerson in snapshot.children){
+                            val lastMessage = eachPerson.getValue(LastMessage::class.java)
+                            lastMessage?.let {
+                                newList.add(it)
+                            }
+
                         }
+                        newList.sortByDescending{ it -> it.send_time}
+                        _lastMessageList.postValue(newList)
+                        Timber.d("newList: $newList")
 
                     }
-                    newList.sortByDescending{ it -> it.send_time}
-                    _lastMessageList.postValue(newList)
-                    Timber.d("newList: $newList")
 
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                }
-            })
+                    override fun onCancelled(error: DatabaseError) {
+                    }
+                })
+        }
     }
+
+//    private fun lastMessageOnDataChange(){
+//        CurrentUser.currentUser?.uid?.let { FirebaseDatabase.getInstance().reference.child(it).add }
+//    }
+
 
     fun saveSelectedChatRoomUserDetail(lastMessage: LastMessage){
         _selectedChatRoomUserDetail.postValue(lastMessage)

@@ -10,10 +10,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.petsmatchingapp.R
 import com.example.petsmatchingapp.databinding.FragmentHomeBinding
+import com.example.petsmatchingapp.model.CurrentUser
 import com.example.petsmatchingapp.model.Invitation
 import com.example.petsmatchingapp.ui.activity.MatchingActivity
 import com.example.petsmatchingapp.ui.adapter.HomeAdapter
 import com.example.petsmatchingapp.ui.adapter.MultiplePhotoAdapter
+import com.example.petsmatchingapp.utils.Constant
 import com.example.petsmatchingapp.viewmodel.AccountViewModel
 import com.example.petsmatchingapp.viewmodel.MatchingViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -36,14 +38,36 @@ class HomeFragment : BaseFragment() {
     ): View? {
 
 
-        showActionBarAndBottomNavigation()
+
+//        showActionBarAndBottomNavigation()
         binding = FragmentHomeBinding.inflate(inflater)
 
+//
+//        matchingViewModel.deletedState.observe(viewLifecycleOwner,{
+//            if(it == Constant.TRUE){
+//                showSnackBar(resources.getString(R.string.delete_successful), false)
+//                CurrentUser.currentUser?.uid?.let { matchingViewModel.getCurrentUserInvitation() }
+//            }else{
+//                showSnackBar(it,true)
+//            }
+//        })
         matchingViewModel.homeInvitationList.observe(viewLifecycleOwner, Observer {
           homeAdapter.submitList(it)
         })
         setAdapter()
 
+        homeAdapter.clickItemViewEvent = {
+            matchingViewModel.addSelectedInvitationToLiveData(it)
+            nav.navigate(R.id.action_navigation_home_to_invitationDetailFragment)
+        }
+
+        homeAdapter.clickGarbageEvent = {
+            setAndShowDeleteDialog(it)
+        }
+
+        matchingViewModel.getCurrentUserInvitationState.observe(viewLifecycleOwner,{
+            showSnackBar(it,true)
+        })
 
         nav = findNavController()
         setHasOptionsMenu(true)
@@ -51,11 +75,7 @@ class HomeFragment : BaseFragment() {
     }
 
 
-    override fun onResume() {
 
-        accountViewModel.userDetail.value?.id?.let { matchingViewModel.getCurrentUserInvitation(this,it) }
-        super.onResume()
-    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.home_menu, menu)
@@ -75,26 +95,26 @@ class HomeFragment : BaseFragment() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun showActionBarAndBottomNavigation() {
-
-        if (requireActivity().findViewById<BottomNavigationView>(R.id.nav_view).visibility == View.GONE) {
-            requireActivity().findViewById<BottomNavigationView>(R.id.nav_view).visibility =
-                View.VISIBLE
-        }
-
-        val activityInstance = this.activity as MatchingActivity
-        activityInstance.supportActionBar?.show()
-
-    }
+//    private fun showActionBarAndBottomNavigation() {
+//
+//        if (requireActivity().findViewById<BottomNavigationView>(R.id.nav_view).visibility == View.GONE) {
+//            requireActivity().findViewById<BottomNavigationView>(R.id.nav_view).visibility =
+//                View.VISIBLE
+//        }
+//
+//        val activityInstance = this.activity as MatchingActivity
+//        activityInstance.supportActionBar?.show()
+//
+//    }
 
     private fun setAdapter() {
         binding.rvHomeFragment.layoutManager = LinearLayoutManager(requireContext())
-        homeAdapter = HomeAdapter(this)
+        homeAdapter = HomeAdapter()
         binding.rvHomeFragment.adapter = homeAdapter
     }
 
     fun deleteInvitation(id: String) {
-        matchingViewModel.deleteInvitation(id, this)
+        matchingViewModel.deleteInvitation(id)
     }
 
 
@@ -125,22 +145,12 @@ class HomeFragment : BaseFragment() {
 
     }
 
-    fun deleteInvitationSuccess() {
-        showSnackBar(resources.getString(R.string.delete_successful), false)
-        matchingViewModel.getCurrentUserInvitation(this,accountViewModel.getCurrentUID()!!)
-    }
 
-    fun deleteInvitationFail(e: String) {
-        showSnackBar(e, true)
-    }
-
-    fun getCurrentUserInvitationListFail(e: String){
-        showSnackBar(e,true)
-    }
-
-    fun addSelectedInvitationToViewModel(invitation: Invitation){
-        matchingViewModel.addSelectedInvitationToLiveData(invitation)
-        nav.navigate(R.id.action_navigation_home_to_invitationDetailFragment)
-    }
+//
+//
+//    fun addSelectedInvitationToViewModel(invitation: Invitation){
+//        matchingViewModel.addSelectedInvitationToLiveData(invitation)
+//        nav.navigate(R.id.action_navigation_home_to_invitationDetailFragment)
+//    }
 
 }

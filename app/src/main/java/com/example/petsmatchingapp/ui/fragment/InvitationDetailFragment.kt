@@ -89,7 +89,6 @@ class InvitationDetailFragment : Fragment() {
 
         })
 
-        dismissActivityActionBarAndBottomNavigationView()
         binding.toolbarInvitationDetailFragment.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
         binding.toolbarInvitationDetailFragment.setNavigationOnClickListener {
             requireActivity().onBackPressed()
@@ -106,12 +105,7 @@ class InvitationDetailFragment : Fragment() {
         return binding.root
     }
 
-    private fun dismissActivityActionBarAndBottomNavigationView(){
-        val activityInstance = this.activity as MatchingActivity
-        activityInstance.supportActionBar?.hide()
-        activityInstance.findViewById<BottomNavigationView>(R.id.nav_view).visibility = View.GONE
 
-    }
 
     private fun setAdapter(list: List<String>){
 

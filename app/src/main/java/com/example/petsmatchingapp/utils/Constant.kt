@@ -9,9 +9,15 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.petsmatchingapp.R
+import com.google.firebase.auth.FirebaseAuth
+import timber.log.Timber
 import java.net.URL
 
 object Constant {
+
+    init {
+        Timber.d("你好我是Constant")
+    }
 
     const val USER: String = "user"
     const val MAN: String = "man"
@@ -41,6 +47,7 @@ object Constant {
     const val LAST_MESSAGE = "last_message"
     const val CHAT_IMAGE = "chat_image"
 
+    const val TRUE = "true"
 
     fun loadUserImage(url: Any, v:ImageView){
 
@@ -65,4 +72,7 @@ object Constant {
         return MimeTypeMap.getSingleton().getExtensionFromMimeType(activity.contentResolver.getType(uri))
     }
 
+
+
 }
+

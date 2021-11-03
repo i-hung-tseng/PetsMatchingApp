@@ -8,6 +8,7 @@ import android.widget.CheckBox
 import androidx.navigation.fragment.findNavController
 import com.example.petsmatchingapp.R
 import com.example.petsmatchingapp.databinding.FragmentSearchBinding
+import com.example.petsmatchingapp.model.CurrentUser
 import com.example.petsmatchingapp.ui.activity.MatchingActivity
 import com.example.petsmatchingapp.utils.Constant
 import com.example.petsmatchingapp.viewmodel.AccountViewModel
@@ -37,12 +38,12 @@ class SearchFragment : BaseFragment() {
         binding = FragmentSearchBinding.inflate(inflater)
 
 
-
+        // TODO: 2021/11/2 看navigation 原本的方式
         binding.toolbarSearchFragment.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
         binding.toolbarSearchFragment.setNavigationOnClickListener {
             requireActivity().onBackPressed()
         }
-        dismissActivityActionBarAndBottomNavigationView()
+
         binding.btnSearchSubmit.setOnClickListener {
 
                     getAreaCheckedList()
@@ -54,7 +55,10 @@ class SearchFragment : BaseFragment() {
                     }else{
                         result_sort = Constant.RESULT_SORT_UPDATE_DAY
                     }
-                    matchingViewModel.searchInvitation(accountViewModel.getCurrentUID()!!,areaCheckedList,petTypeCheckedList,result_sort,this)
+
+                    CurrentUser.currentUser?.uid?.let {
+                        matchingViewModel.searchByRequirement(it,areaCheckedList,petTypeCheckedList,result_sort)
+                    }
                 }
 
            }
@@ -64,12 +68,8 @@ class SearchFragment : BaseFragment() {
     }
 
 
-    private fun dismissActivityActionBarAndBottomNavigationView(){
-        val activityInstance = this.activity as MatchingActivity
-        activityInstance.supportActionBar?.hide()
-        activityInstance.findViewById<BottomNavigationView>(R.id.nav_view).visibility = View.GONE
 
-    }
+    // TODO: 2021/10/29 用checkBokGroup
     private fun getAreaCheckedList(){
         val list = listOf<CheckBox>(binding.cbCityKeelung,binding.cbCityTaipei,binding.cbCityNewTaipei,binding.cbCityTaoyuan,binding.cbCityXinzhu,binding.cbCityXinzhuCounty
         ,binding.cbCityMiaoli,binding.cbCityMiaoliCounty,binding.cbCityTaichung,binding.cbCityZhanghua,binding.cbCityZhanghuaCounty,binding.cbCityNantou,binding.cbCityNantouCounty
@@ -101,10 +101,6 @@ class SearchFragment : BaseFragment() {
         }else{
             showSnackBar("沒有找到符合的資料",false)
         }
-    }
-
-    fun searchInvitationFail(e: String){
-        showSnackBar(e,true)
     }
 
     private fun validDataForm(): Boolean{
