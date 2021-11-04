@@ -15,11 +15,13 @@ import com.example.petsmatchingapp.model.Invitation
 import com.example.petsmatchingapp.ui.activity.MatchingActivity
 import com.example.petsmatchingapp.ui.adapter.HomeAdapter
 import com.example.petsmatchingapp.ui.adapter.MultiplePhotoAdapter
+import com.example.petsmatchingapp.utils.CheckInternetState
 import com.example.petsmatchingapp.utils.Constant
 import com.example.petsmatchingapp.viewmodel.AccountViewModel
 import com.example.petsmatchingapp.viewmodel.MatchingViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import timber.log.Timber
 
 
 class HomeFragment : BaseFragment() {
@@ -28,7 +30,6 @@ class HomeFragment : BaseFragment() {
     private lateinit var nav: NavController
 
     private val matchingViewModel: MatchingViewModel by sharedViewModel()
-    private val accountViewModel: AccountViewModel by sharedViewModel()
     private lateinit var homeAdapter: HomeAdapter
 
     override fun onCreateView(
@@ -55,6 +56,7 @@ class HomeFragment : BaseFragment() {
           homeAdapter.submitList(it)
         })
         setAdapter()
+
 
         homeAdapter.clickItemViewEvent = {
             matchingViewModel.addSelectedInvitationToLiveData(it)

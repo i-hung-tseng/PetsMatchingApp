@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
@@ -14,31 +13,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.example.petsmatchingapp.R
 import com.example.petsmatchingapp.databinding.FragmentAddInvitationBinding
-import com.example.petsmatchingapp.model.Banner
 import com.example.petsmatchingapp.model.Invitation
-import com.example.petsmatchingapp.ui.activity.MatchingActivity
 import com.example.petsmatchingapp.ui.adapter.MultiplePhotoAdapter
+import com.example.petsmatchingapp.utils.CheckInternetState
 import com.example.petsmatchingapp.utils.Constant
 import com.example.petsmatchingapp.viewmodel.AccountViewModel
 import com.example.petsmatchingapp.viewmodel.MatchingViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.Timestamp
-import com.google.firebase.database.ServerValue
 import com.zhpan.indicator.enums.IndicatorSlideMode
 import com.zhpan.indicator.enums.IndicatorStyle
-import org.koin.android.ext.android.bind
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -200,6 +189,10 @@ class AddInvitationFragment : BaseFragment(),View.OnClickListener {
             binding.btnAddInvitationFragmentSubmit ->{
 
 
+                if(!CheckInternetState(requireContext()).isInternetAvailable()){
+                    showSnackBar("請先確認網路情況",true)
+                    return
+                }
 
                if (validDataFormAndSaveImage()){
                    showDialog(resources.getString(R.string.please_wait))

@@ -32,6 +32,10 @@ class MatchingViewModel : ViewModel() {
     val selectedInvitation: LiveData<Invitation>
         get() = _selectedInvitation
 
+    private val _backToDashboard = MutableLiveData<Boolean>()
+    val backToDashboard: LiveData<Boolean> = _backToDashboard
+
+
     private val _getAllInvitationState = SingleLiveEvent<String>()
     val getAllInvitationState: SingleLiveEvent<String> = _getAllInvitationState
 
@@ -46,8 +50,9 @@ class MatchingViewModel : ViewModel() {
     val getCurrentUserInvitationState: SingleLiveEvent<String> = _getCurrentUserInvitationState
 
 
-    private val _dashboardInvitationList = SingleLiveEvent<List<Invitation>>()
-    val dashboardInvitationList: MutableLiveData<List<Invitation>>
+    // TODO: 2021/11/4 如果這邊改成 Single 則不會進到 Observe
+    private val _dashboardInvitationList =  MutableLiveData<List<Invitation>>()
+    val dashboardInvitationList: LiveData<List<Invitation>>
         get() = _dashboardInvitationList
 
     private val _allInvitationList = MutableLiveData<List<Invitation>>()
@@ -472,6 +477,7 @@ class MatchingViewModel : ViewModel() {
                         }
                     }
                     _dashboardInvitationList.postValue(list)
+                    _backToDashboard.value = true
                 }
             Timber.d("Search測試進到 area & pet 都是 empty")
 
@@ -495,6 +501,8 @@ class MatchingViewModel : ViewModel() {
                         }
                         Timber.d("Search測試進到 list.size ${list.size}")
                         _dashboardInvitationList.postValue(list)
+                        _backToDashboard.value = true
+
                     }
                     .addOnFailureListener { Timber.d("Search測試進到fail $it") }
             }
@@ -517,6 +525,8 @@ class MatchingViewModel : ViewModel() {
                         }
                         Timber.d("Search測試進到 list.size ${list.size}")
                         _dashboardInvitationList.postValue(list)
+                        _backToDashboard.value = true
+
                     }
                     .addOnFailureListener { Timber.d("Search測試進到fail $it")}
             }
@@ -538,6 +548,8 @@ class MatchingViewModel : ViewModel() {
                         }
                         Timber.d("Search測試進到 list.size ${list.size}")
                         _dashboardInvitationList.postValue(list)
+                        _backToDashboard.value = true
+
                     }
                     .addOnFailureListener { Timber.d("Search測試進到fail $it")}
 
@@ -566,6 +578,10 @@ class MatchingViewModel : ViewModel() {
 
     fun resetSaveImageState(){
         _saveImage_fail.postValue(null)
+    }
+
+    fun resetBackToDashboard(){
+        _backToDashboard.postValue(false)
     }
 
     private fun firebaseDataChangeListener(){

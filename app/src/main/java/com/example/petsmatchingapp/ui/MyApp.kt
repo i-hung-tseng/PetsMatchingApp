@@ -5,8 +5,9 @@ import com.example.petsmatchingapp.BuildConfig
 import com.example.petsmatchingapp.viewmodel.AccountViewModel
 import com.example.petsmatchingapp.viewmodel.ChatViewModel
 import com.example.petsmatchingapp.viewmodel.MatchingViewModel
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.firestoreSettings
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.ktx.messaging
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -18,9 +19,15 @@ class MyApp: Application() {
 
     override fun onCreate() {
 
-        FirebaseDatabase.getInstance().setPersistenceEnabled(false)
-        Firebase.database.setPersistenceEnabled(false)
-        Timber.d(this.toString())
+
+
+        val settings = firestoreSettings {
+            isPersistenceEnabled = true
+        }
+
+        Firebase.firestore.firestoreSettings = settings
+        Firebase.database.setPersistenceEnabled(true)
+
         super.onCreate()
         if(BuildConfig.DEBUG){
             Timber.plant(Timber.DebugTree())

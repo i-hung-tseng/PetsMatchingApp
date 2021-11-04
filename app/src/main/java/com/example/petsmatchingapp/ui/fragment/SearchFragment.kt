@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.navigation.fragment.findNavController
 import com.example.petsmatchingapp.R
 import com.example.petsmatchingapp.databinding.FragmentSearchBinding
@@ -28,6 +30,15 @@ class SearchFragment : BaseFragment() {
     private val matchingViewModel: MatchingViewModel by sharedViewModel()
     private val accountViewModel: AccountViewModel by sharedViewModel()
 
+//
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        requireActivity().onBackPressedDispatcher.addCallback(this, object: OnBackPressedCallback(true){
+//            override fun handleOnBackPressed() {
+//                TODO("Not yet implemented")
+//            }
+//        })
+//    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -41,8 +52,20 @@ class SearchFragment : BaseFragment() {
         // TODO: 2021/11/2 看navigation 原本的方式
         binding.toolbarSearchFragment.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
         binding.toolbarSearchFragment.setNavigationOnClickListener {
-            requireActivity().onBackPressed()
+           requireActivity().onBackPressed()
         }
+
+        matchingViewModel.dashboardInvitationList.observe(viewLifecycleOwner,{
+            Timber.d("觀察 state backTo ${matchingViewModel.backToDashboard.value}")
+            if (it.isEmpty()){
+                showSnackBar("沒有找到符合的資料",true)
+            }else{
+                if (matchingViewModel.backToDashboard.value == true){
+                    findNavController().navigate(R.id.action_searchFragment_to_navigation_dashboard)
+                    matchingViewModel.resetBackToDashboard()
+                }
+            }
+        })
 
         binding.btnSearchSubmit.setOnClickListener {
 

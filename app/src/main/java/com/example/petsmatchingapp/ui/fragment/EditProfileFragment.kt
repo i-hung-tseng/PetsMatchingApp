@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.example.petsmatchingapp.R
 import com.example.petsmatchingapp.databinding.FragmentEditProfileBinding
+import com.example.petsmatchingapp.utils.CheckInternetState
 import com.example.petsmatchingapp.utils.Constant
 import com.example.petsmatchingapp.viewmodel.AccountViewModel
 import com.github.dhaval2404.imagepicker.ImagePicker
@@ -149,6 +150,10 @@ class EditProfileFragment : BaseFragment(),View.OnClickListener {
                checkPermission()
            }
            binding.btnEdit ->{
+               if(!CheckInternetState(requireContext()).isInternetAvailable()){
+                   showSnackBar("請先確認網路情況",true)
+                   return
+               }
                if (validDataForm()){
                    showDialog(resources.getString(R.string.please_wait))
                    val mHashMap = HashMap<String,Any>()

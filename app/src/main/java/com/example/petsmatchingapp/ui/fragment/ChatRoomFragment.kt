@@ -17,6 +17,7 @@ import com.example.petsmatchingapp.databinding.FragmentChatRoomBinding
 import com.example.petsmatchingapp.model.Message
 import com.example.petsmatchingapp.ui.activity.MatchingActivity
 import com.example.petsmatchingapp.ui.adapter.ChatRoomAdapter
+import com.example.petsmatchingapp.utils.CheckInternetState
 import com.example.petsmatchingapp.utils.Constant
 import com.example.petsmatchingapp.viewmodel.AccountViewModel
 import com.example.petsmatchingapp.viewmodel.ChatViewModel
@@ -143,6 +144,10 @@ class ChatRoomFragment : BaseFragment() {
 
         var message :Message
 
+        if(!CheckInternetState(requireContext()).isInternetAvailable()){
+            showSnackBar("請先確認網路情況",true)
+            return
+        }
         if (chatViewModel.fromDetail.value == true){
             message = Message(
                 user_name = accountViewModel.userDetail.value!!.name,

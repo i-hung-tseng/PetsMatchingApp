@@ -24,7 +24,8 @@
 
 
                 <com.example.petsmatchingapp.utils.JFTextView
-                    android:layout_width="match_parent"
+                    android:layout_width="m+
+                    atch_parent"
                     android:layout_height="match_parent"
                     android:text="@string/toolbar_title_forgot_account"
                     android:gravity="center"
@@ -74,6 +75,7 @@
 
             <com.example.petsmatchingapp.utils.JFEditText
                 android:id="@+id/ed_forgot_email"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_enter_your_email"
@@ -99,9 +101,19 @@
             android:layout_marginTop="30dp"
             android:foreground="?attr/selectableItemBackground"
             android:background="@drawable/button_background"
+
             android:textColor="@color/white"
             android:text="@string/submit"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
+
+
+
+
+
+
+
+
+
