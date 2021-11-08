@@ -35,4 +35,11 @@ in this app,you can do...
 
 ## Step.5_Chat-Room
 
+### when you see which invitation you interested in, you can easily  click that, and you will enter invitation detail page. After you enter invitation detail page, click chat button that chat with pet owner.  
+
 ![read.me.chatroom](https://github.com/i-hung-tseng/PetsMatchingApp/blob/24f594a1488b75e84cbc1264f318997694351cee/readme_chat.gif)
+
+# Future Scope
+
+* when you in add invitation process, you can save your invitation in local before push to remote.
+* In chatRoom, you can send multiple photo/video.
