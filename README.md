@@ -18,10 +18,21 @@ in this app,you can do...
 
 ### When you enter hoemPage, you will see dashboard that contain all invitation, you can clikc which you want to know detail about invitation, also you can just click chat button to directly communicate with pet owner if you like(we will talk about it later).If you want to search invitation by pet type, invitation area, you can simply click search button that search invitation by condition.
 
+![image](https://github.com/i-hung-tseng/PetsMatchingApp/blob/d7b0d5bb65cd62ba40f049099cbe0c6587d41833/readme_step2.dashboard.%E5%A3%93%E7%B8%AE%E5%BE%8C.gif)
 
 
 ## Step.3_Upload Profile
 
 ### upload your photo, or edit your address/ gender. your photo will be displayed in chatRoom when you talk to other one.
 
-![readme.editProfile](https://i.postimg.cc/fRnShTCB/readme-step3-editprofile.gif)
+![readme.editProfile](https://github.com/i-hung-tseng/PetsMatchingApp/blob/9c5ed6948eb77742981dab44f35d85011a64a713/readme_step3.editprofile.gif)
+
+## Step.4_Add/Delete Invitation
+
+### In homePage, you can see your all invitation. Click plus button in right top corner, you can add any invitation you want. Choose one or more than one picture let other user can know more detail from your invitation.
+
+![readme.add.invitation](https://github.com/i-hung-tseng/PetsMatchingApp/blob/8c97abf5dd8e4848ab03c54af91cf1182fbed173/readme_homepage_delete.gif)
+
+## Step.5_Chat-Room
+
+![read.me.chatroom](https://github.com/i-hung-tseng/PetsMatchingApp/blob/24f594a1488b75e84cbc1264f318997694351cee/readme_chat.gif)
