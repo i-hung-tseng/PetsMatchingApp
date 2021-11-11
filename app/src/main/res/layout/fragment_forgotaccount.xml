@@ -24,8 +24,7 @@
 
 
                 <com.example.petsmatchingapp.utils.JFTextView
-                    android:layout_width="m+
-                    atch_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="@string/toolbar_title_forgot_account"
                     android:gravity="center"

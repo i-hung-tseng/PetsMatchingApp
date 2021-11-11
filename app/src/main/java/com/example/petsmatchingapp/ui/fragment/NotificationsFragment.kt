@@ -53,6 +53,7 @@ class NotificationsFragment : Fragment() {
   private fun setAdapter(){
     notificationAdapter = NotificationAdapter(this)
     binding.rvAllMessage.adapter = notificationAdapter
+    binding.rvAllMessage.setHasFixedSize(true)
     binding.rvAllMessage.layoutManager = LinearLayoutManager(requireContext())
 
   }

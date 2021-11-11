@@ -174,7 +174,9 @@ class MatchingViewModel : ViewModel() {
                 if (error != null){
                     return@addSnapshotListener
                 }
-                if (value?.isEmpty == false){
+                //注意這邊不能用 Empty，因為當刪除掉資料時，就會變成 empty，所以要改用 null
+                if (value != null){
+                    Timber.d("value != null")
                     val list: MutableList<Invitation> = mutableListOf()
                     for (i in value.documents){
                         val model = i.toObject(Invitation::class.java)
@@ -193,6 +195,7 @@ class MatchingViewModel : ViewModel() {
             .delete()
             .addOnSuccessListener {
                 _deletedState.postValue(Constant.TRUE)
+
             }
 
             .addOnFailureListener {

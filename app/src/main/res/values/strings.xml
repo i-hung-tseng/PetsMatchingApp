@@ -42,7 +42,7 @@
     <string name="man">男性</string>
     <string name="female">女性</string>
     <string name="edit_user_detail_successful">修改資料完成!</string>
-    <string name="update_user_profile_successful">上傳圖片成功!</string>
+    <string name="update_user_profile_successful">修改資料成功!</string>
     <string name="hint_select_your_image">請選取照片!</string>
 
     <string name="toolbar_title_add_invitation">新增邀約</string>

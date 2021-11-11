@@ -104,22 +104,34 @@ class ChatViewModel:ViewModel() {
     fun messageValueListener(currentUID: String, invitationUID: String){
 
         val ref = FirebaseDatabase.getInstance().reference.child(currentUID).child(invitationUID)
-        ref.addValueEventListener(object : ValueEventListener{
+        ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val list = mutableListOf<Message>()
-                for (i in snapshot.children){
+                for (i in snapshot.children) {
                     val message = i.getValue(Message::class.java)
                     if (message != null) {
+                        val updateTime =
+                            SimpleDateFormat("MM-dd", Locale.getDefault()).format(message.time)
+                        val timeMessage = Message(message = updateTime, send_user_id = "time")
+                        when {
+                            list.isEmpty() -> {
+                                list.add(timeMessage)
+                                list.add(message)
+                            }
+                            updateTime != SimpleDateFormat("MM-dd", Locale.getDefault()).format(list.last().time) -> {
+                                list.add(timeMessage)
+                                list.add(message)
+                                Timber.d("chat測試time $updateTime last ${SimpleDateFormat("MM-dd", Locale.getDefault()).format(list.last().time)}")
+                            }
 
-                        val format = "yyyy-MM-dd"
-                        val sdf = SimpleDateFormat(format, Locale.getDefault())
-                        val updateTime = sdf.format(message.time)
-                        Timber.d("updateTime $updateTime")
+                            else -> {list.add(message)}
+                        }
 
-                        list.add(message)
+//                        list.add(message)
 
                     }
                 }
+                Timber.d("chatTest list.size = ${list.size} list = $list")
                 _messageList.postValue(list.reversed())
             }
 

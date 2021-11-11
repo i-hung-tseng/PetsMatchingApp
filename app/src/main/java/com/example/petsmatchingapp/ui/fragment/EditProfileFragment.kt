@@ -62,7 +62,9 @@ class EditProfileFragment : BaseFragment(),View.OnClickListener {
         binding = FragmentEditProfileBinding.inflate(inflater)
 
         accountViewModel.userDetail.observe(viewLifecycleOwner, {
-            Constant.loadUserImage(it.image,binding.ivEditProfileImage)
+            if(selectedUri == null){
+                Constant.loadUserImage(it.image,binding.ivEditProfileImage)
+            }
             if (it.area != ""){
                 binding.edEditArea.setText(it.area)
             }

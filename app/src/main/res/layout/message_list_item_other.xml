@@ -15,15 +15,15 @@
 
     <RelativeLayout
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="5dp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
 
         <ImageView
             android:id="@+id/iv_item_message_other_image"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="5dp"
             android:layout_alignParentStart="true"
             tools:src = "@drawable/icon_dog"/>
 
@@ -45,10 +45,12 @@
 
         <ImageView
             android:id="@+id/iv_list_item_other_image"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:padding="5dp"
+            android:maxWidth="200dp"
+            android:adjustViewBounds="true"
             android:visibility="gone"
             android:layout_toEndOf="@id/iv_item_message_other_image"
             android:layout_alignTop="@id/iv_item_message_other_image"/>

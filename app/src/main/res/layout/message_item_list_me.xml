@@ -16,7 +16,6 @@
 
     <RelativeLayout
         android:id="@+id/rl_message_item_list_layout"
-        android:padding="5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
@@ -43,6 +42,7 @@
                 android:text="@{message.message}"
                 android:layout_alignParentEnd="true"
                 android:padding="5dp"
+                android:layout_marginEnd="5dp"
                 android:textSize="16sp"
                 android:maxWidth="250dp"
                 android:background="@drawable/message_background_me"
@@ -54,11 +54,13 @@
 
             <ImageView
                 android:id="@+id/iv_item_list_me"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
                 android:layout_alignParentEnd="true"
                 android:visibility="gone"
-                android:padding="5dp">
+                android:layout_marginEnd="5dp"
+                android:maxWidth="200dp">
 
             </ImageView>
 

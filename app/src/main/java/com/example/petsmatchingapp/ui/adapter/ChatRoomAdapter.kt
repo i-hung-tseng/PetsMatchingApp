@@ -8,6 +8,10 @@ import android.widget.RelativeLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.TransitionOptions
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.petsmatchingapp.databinding.ChatRoomTimeBinding
 import com.example.petsmatchingapp.databinding.MessageItemListMeBinding
 import com.example.petsmatchingapp.databinding.MessageListItemOtherBinding
 import com.example.petsmatchingapp.model.Message
@@ -26,6 +30,7 @@ class ChatRoomAdapter(): ListAdapter<Message, RecyclerView.ViewHolder>(DiffCallb
 
     private val MESSAGE_TYPE_LEFT = 0
     private val MESSAGE_TYPE_RIGHT = 1
+    private val MESSAGE_TYPE_TIME = 2
 
     private var firebaseUser: FirebaseUser? = null
 
@@ -44,38 +49,48 @@ class ChatRoomAdapter(): ListAdapter<Message, RecyclerView.ViewHolder>(DiffCallb
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
-        return if (viewType == MESSAGE_TYPE_RIGHT) {
-
-            MyMessageViewHolder(MessageItemListMeBinding.inflate(LayoutInflater.from(parent.context)))
-        } else {
-            OtherMessageViewHolder(
-                MessageListItemOtherBinding.inflate(
-                    LayoutInflater.from(
-                        parent.context
-                    )
-                )
-            )
-        }
-    }
+        return when(viewType) {
+            MESSAGE_TYPE_RIGHT -> { MyMessageViewHolder(MessageItemListMeBinding.inflate(LayoutInflater.from(parent.context)))}
+            MESSAGE_TYPE_LEFT -> { OtherMessageViewHolder(MessageListItemOtherBinding.inflate(LayoutInflater.from(parent.context)))}
+            else -> {TimeViewHolder(ChatRoomTimeBinding.inflate(LayoutInflater.from(parent.context)))}
+    } }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val model = getItem(position)
         when (holder) {
             is MyMessageViewHolder -> {
+                Timber.d("chatTest My message ${model.message}")
+
                 holder.bind(model)
                 if (model.image != null) {
-                    Constant.loadPetImage(model.image, holder.binding.ivItemListMe)
+                    Glide.with(holder.binding.ivItemListMe)
+                        .load(model.image)
+                        .transform(RoundedCorners(50))
+                        .into(holder.binding.ivItemListMe)
+
                     holder.itemView.iv_item_list_me.visibility = View.VISIBLE
                     holder.itemView.tv_item_message_me_message.visibility = View.GONE
-
                 }
-
-
             }
+
+            is TimeViewHolder -> {
+                Timber.d("chatTest Time message ${model.message}")
+
+                holder.bind(model)
+            }
+
             is OtherMessageViewHolder -> {
+                Timber.d("chatTest other message ${model.message}")
+
                 holder.bind(model)
                 if (model.image != null) {
-                    Constant.loadPetImage(model.image, holder.binding.ivListItemOtherImage)
+//                    Constant.loadPetImage(model.image, holder.binding.ivListItemOtherImage)
+                    Glide.with(holder.binding.ivListItemOtherImage)
+                        .load(model.image)
+                        .transform(RoundedCorners(50))
+                        .into(holder.binding.ivListItemOtherImage)
+
+
                     holder.itemView.iv_list_item_other_image.visibility = View.VISIBLE
                     holder.itemView.item_message_other_message.visibility = View.GONE
                 }
@@ -83,7 +98,6 @@ class ChatRoomAdapter(): ListAdapter<Message, RecyclerView.ViewHolder>(DiffCallb
             }
         }
     }
-
 
     class MyMessageViewHolder(val binding: MessageItemListMeBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -113,6 +127,13 @@ class ChatRoomAdapter(): ListAdapter<Message, RecyclerView.ViewHolder>(DiffCallb
 
         }
     }
+        class TimeViewHolder(val binding: ChatRoomTimeBinding): RecyclerView.ViewHolder(binding.root){
+            fun bind(item:Message){
+                binding.tvTime.text = item.message
+                Timber.d("測試 ")
+                binding.executePendingBindings()
+            }
+        }
 
         class OtherMessageViewHolder(val binding: MessageListItemOtherBinding) :
             RecyclerView.ViewHolder(binding.root) {
@@ -140,8 +161,6 @@ class ChatRoomAdapter(): ListAdapter<Message, RecyclerView.ViewHolder>(DiffCallb
                     binding.itemMessageOtherTime.layoutParams = time
 
                 }
-
-
                 binding.executePendingBindings()
 
             }
@@ -149,11 +168,18 @@ class ChatRoomAdapter(): ListAdapter<Message, RecyclerView.ViewHolder>(DiffCallb
 
         override fun getItemViewType(position: Int): Int {
             firebaseUser = FirebaseAuth.getInstance().currentUser
-            if (firebaseUser?.uid == getItem(position).send_user_id) {
-                return MESSAGE_TYPE_RIGHT
-            } else {
-                return MESSAGE_TYPE_LEFT
+            return when(getItem(position).send_user_id){
+                firebaseUser?.uid -> {
+                    MESSAGE_TYPE_RIGHT
+                }
+                "time" -> {
+                    MESSAGE_TYPE_TIME
+                }
+                else -> {
+                    MESSAGE_TYPE_LEFT
+                }
             }
+
         }
 
     }

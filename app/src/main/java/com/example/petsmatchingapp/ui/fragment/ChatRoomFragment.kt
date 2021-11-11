@@ -9,6 +9,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Space
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,6 +20,7 @@ import com.example.petsmatchingapp.ui.activity.MatchingActivity
 import com.example.petsmatchingapp.ui.adapter.ChatRoomAdapter
 import com.example.petsmatchingapp.utils.CheckInternetState
 import com.example.petsmatchingapp.utils.Constant
+import com.example.petsmatchingapp.utils.SpacesItemDecoration
 import com.example.petsmatchingapp.viewmodel.AccountViewModel
 import com.example.petsmatchingapp.viewmodel.ChatViewModel
 import com.example.petsmatchingapp.viewmodel.MatchingViewModel
@@ -192,6 +194,7 @@ class ChatRoomFragment : BaseFragment() {
     private fun setAdapter() {
         chatAdapter = ChatRoomAdapter()
         binding.rvChatRoom.adapter = chatAdapter
+        binding.rvChatRoom.addItemDecoration(SpacesItemDecoration(5),)
         val linerLayout = LinearLayoutManager(requireContext())
         linerLayout.reverseLayout = true
         binding.rvChatRoom.layoutManager = linerLayout
