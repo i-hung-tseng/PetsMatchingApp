@@ -25,5 +25,6 @@
     <color name="chat_room_background">#8cabd9</color>
     <color name="message_me_color">#78e37a</color>
 
+    <color name="gallery_selected_color">#B3000000</color>
 
 </resources>

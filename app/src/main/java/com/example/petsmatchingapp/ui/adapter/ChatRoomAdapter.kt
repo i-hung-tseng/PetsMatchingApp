@@ -38,11 +38,12 @@ class ChatRoomAdapter(): ListAdapter<Message, RecyclerView.ViewHolder>(DiffCallb
     companion object DiffCallback : DiffUtil.ItemCallback<Message>() {
         override fun
                 areItemsTheSame(oldItem: Message, newItem: Message): Boolean {
+            Timber.d("DiffUtil測試 areItems ${oldItem === newItem}")
             return oldItem === newItem
         }
 
         override fun areContentsTheSame(oldItem: Message, newItem: Message): Boolean {
-
+            Timber.d("DiffUtil測試 contents ${oldItem == newItem}")
             return oldItem == newItem
         }
     }
@@ -130,6 +131,7 @@ class ChatRoomAdapter(): ListAdapter<Message, RecyclerView.ViewHolder>(DiffCallb
         class TimeViewHolder(val binding: ChatRoomTimeBinding): RecyclerView.ViewHolder(binding.root){
             fun bind(item:Message){
                 binding.tvTime.text = item.message
+                binding.tvTime.alpha = 0.5F
                 Timber.d("測試 ")
                 binding.executePendingBindings()
             }
@@ -181,5 +183,6 @@ class ChatRoomAdapter(): ListAdapter<Message, RecyclerView.ViewHolder>(DiffCallb
             }
 
         }
+
 
     }

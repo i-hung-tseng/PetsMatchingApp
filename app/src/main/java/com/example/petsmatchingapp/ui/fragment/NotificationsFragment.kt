@@ -33,7 +33,7 @@ class NotificationsFragment : Fragment() {
 
 
 
-    chatViewModel.lastMessageList.observe(viewLifecycleOwner, Observer {
+    chatViewModel.lastMessageList.observe(viewLifecycleOwner, {
       notificationAdapter.submitList(it)
     })
 

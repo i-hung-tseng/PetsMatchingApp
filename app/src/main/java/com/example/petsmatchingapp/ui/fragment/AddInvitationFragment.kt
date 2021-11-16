@@ -210,8 +210,9 @@ class AddInvitationFragment : BaseFragment(),View.OnClickListener {
                        update_time = Timestamp(Date(System.currentTimeMillis())),
                    )
                    selectedUriList?.let {
-                       matchingViewModel.saveImageToFireStorage(selectedUriTypeList,
-                           it,invitation)
+                           matchingViewModel.saveImageToFireStorage(selectedUriTypeList,
+                               it,invitation
+                           )
                    }
                }
             }

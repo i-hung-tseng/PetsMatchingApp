@@ -151,5 +151,6 @@
     <string name="float_test2">分數是%1$.5f</string>
 
     <string name="time_form">時間%1$s</string>
+    <string name="selected_count">已經選擇%1$d張照片</string>
 
 </resources>

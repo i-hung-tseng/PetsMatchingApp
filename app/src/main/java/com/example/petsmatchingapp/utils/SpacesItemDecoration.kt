@@ -4,7 +4,7 @@ import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 
-class SpacesItemDecoration(private var space: Int): RecyclerView.ItemDecoration() {
+class SpacesItemDecoration(private var space_right_left: Int?,private var space_top_bottom: Int?): RecyclerView.ItemDecoration() {
 
 
     override fun getItemOffsets(
@@ -14,7 +14,14 @@ class SpacesItemDecoration(private var space: Int): RecyclerView.ItemDecoration(
         state: RecyclerView.State
     ) {
         super.getItemOffsets(outRect, view, parent, state)
-        outRect.bottom = space
-        outRect.top = space
+        space_top_bottom?.let {
+            outRect.top = it
+            outRect.bottom = it
+        }
+
+        space_right_left?.let {
+            outRect.right = it
+            outRect.left = it
+        }
     }
 }

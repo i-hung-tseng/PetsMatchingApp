@@ -131,7 +131,6 @@ class AccountViewModel: ViewModel() {
         }
 
 
-    // TODO: 2021/11/1 這個不太好，代表誰都可以讀別人的個人資料
     fun getUserDetail(){
         CurrentUser.currentUser?.uid?.let {
                  getFireStoreCollection()
@@ -191,17 +190,17 @@ class AccountViewModel: ViewModel() {
                 }
 
     }
-
-    fun findUserDetailByID(user_id: String){
-
-        getFireStoreCollection().document(user_id).get()
-            .addOnSuccessListener {
-                _selectedUserDetail.postValue(it.toObject(User::class.java))
-            }
-            .addOnFailureListener {
-
-            }
-    }
+//
+//    fun findUserDetailByID(user_id: String){
+//
+//        getFireStoreCollection().document(user_id).get()
+//            .addOnSuccessListener {
+//                _selectedUserDetail.postValue(it.toObject(User::class.java))
+//            }
+//            .addOnFailureListener {
+//
+//            }
+//    }
 
     fun resetUpdateSuccessful(){
         _updateUserDetailSuccessful.postValue(null)

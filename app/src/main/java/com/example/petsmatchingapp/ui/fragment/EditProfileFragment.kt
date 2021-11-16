@@ -19,6 +19,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import com.example.petsmatchingapp.R
 import com.example.petsmatchingapp.databinding.FragmentEditProfileBinding
+import com.example.petsmatchingapp.utils.CheckGalleryPermission
 import com.example.petsmatchingapp.utils.CheckInternetState
 import com.example.petsmatchingapp.utils.Constant
 import com.example.petsmatchingapp.viewmodel.AccountViewModel
@@ -61,44 +62,9 @@ class EditProfileFragment : BaseFragment(),View.OnClickListener {
 
         binding = FragmentEditProfileBinding.inflate(inflater)
 
-        accountViewModel.userDetail.observe(viewLifecycleOwner, {
-            if(selectedUri == null){
-                Constant.loadUserImage(it.image,binding.ivEditProfileImage)
-            }
-            if (it.area != ""){
-                binding.edEditArea.setText(it.area)
-            }
-            binding.edEditProfileName.setText(it.name)
-            if (it.gender == Constant.MAN){
-                binding.rbMan.isChecked = true
-            }else{
-                binding.rbFemale.isChecked = true
-            }
-        })
+        setToolBar()
+        observe()
 
-        accountViewModel.updateUserDetailSuccessful.observe(viewLifecycleOwner, {
-            Timber.d("觀察 update")
-            if (it == true){
-                showSnackBar(resources.getString(R.string.update_user_profile_successful),false)
-                hideDialog()
-                accountViewModel.getUserDetail()
-//                accountViewModel.resetUpdateSuccessful()
-            }
-        })
-
-        accountViewModel.updateUserDetailFail.observe(viewLifecycleOwner,{
-            hideDialog()
-
-            showSnackBar(it,true)
-            accountViewModel.resetUpdateFail()
-        })
-
-
-
-        binding.toolbarEditProfileFragment.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-        binding.toolbarEditProfileFragment.setNavigationOnClickListener {
-            requireActivity().onBackPressed()
-        }
 
 
         binding.btnEdit.setOnClickListener(this)
@@ -110,21 +76,19 @@ class EditProfileFragment : BaseFragment(),View.OnClickListener {
 
 
     private fun checkPermission(){
-        if (ContextCompat.checkSelfPermission(requireActivity(),android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
-            ImagePicker.with(this)
-                .crop()
-                .compress(1024)
-                .createIntent { intent ->
-                    startForProfileImageResult.launch(intent)
-                }
+          if (CheckGalleryPermission(requireContext(),requireActivity()).checkPermission()){
+              ImagePicker.with(this)
+                  .crop()
+                  .compress(1024)
+                  .createIntent { intent ->
+                      startForProfileImageResult.launch(intent)
+                  }
         }else{
-            requestPermission()
+            CheckGalleryPermission(requireContext(),requireActivity()).grantPermission()
         }
     }
 
-    private fun requestPermission(){
-        ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),Constant.REQUEST_CODE_READ)
-    }
+
 
     private fun validDataForm(): Boolean{
         return when{
@@ -179,6 +143,46 @@ class EditProfileFragment : BaseFragment(),View.OnClickListener {
                }
            }
        }
+    }
+    private fun setToolBar(){
+        binding.toolbarEditProfileFragment.setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
+        binding.toolbarEditProfileFragment.setNavigationOnClickListener {
+            requireActivity().onBackPressed()
+        }
+
+    }
+
+    private fun observe(){
+        accountViewModel.userDetail.observe(viewLifecycleOwner, {
+            if(selectedUri == null){
+                Constant.loadUserImage(it.image,binding.ivEditProfileImage)
+            }
+            if (it.area != ""){
+                binding.edEditArea.setText(it.area)
+            }
+            binding.edEditProfileName.setText(it.name)
+            if (it.gender == Constant.MAN){
+                binding.rbMan.isChecked = true
+            }else{
+                binding.rbFemale.isChecked = true
+            }
+        })
+
+        accountViewModel.updateUserDetailSuccessful.observe(viewLifecycleOwner, {
+            Timber.d("觀察 update")
+            if (it == true){
+                showSnackBar(resources.getString(R.string.update_user_profile_successful),false)
+                hideDialog()
+                accountViewModel.getUserDetail()
+//                accountViewModel.resetUpdateSuccessful()
+            }
+        })
+
+        accountViewModel.updateUserDetailFail.observe(viewLifecycleOwner,{
+            hideDialog()
+            showSnackBar(it,true)
+//            accountViewModel.resetUpdateFail()
+        })
     }
 
 
