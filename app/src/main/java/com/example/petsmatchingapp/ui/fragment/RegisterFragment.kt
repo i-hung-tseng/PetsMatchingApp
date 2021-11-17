@@ -70,7 +70,7 @@ class RegisterFragment : BaseFragment() {
             }
 
         }
-        binding.tvRegisterLogin.setOnClickListener {
+        binding.tvAlreadyHaveAccount.setOnClickListener {
             nav.navigate(R.id.action_registerFragment_to_loginFragment)
         }
     }

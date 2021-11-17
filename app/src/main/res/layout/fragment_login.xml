@@ -89,7 +89,7 @@
                 android:id="@+id/ed_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberPassword"
+                android:inputType="textPassword"
                 android:padding="@dimen/edText_padding"
                 android:textSize="@dimen/edText_textSize"/>
 
@@ -100,6 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="@dimen/tip_margin_start_end"
             android:layout_marginRight="@dimen/tip_margin_start_end"
             android:textSize="@dimen/hint_word_textSize"
@@ -134,18 +135,12 @@
 
 
             <com.example.petsmatchingapp.utils.JFTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/login_don_have_account"
-                android:textSize="@dimen/hint_word_textSize" />
-
-            <com.example.petsmatchingapp.utils.JFTextView
                 android:id="@+id/tv_register"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/register"
-                android:textSize="@dimen/hint_word_textSize"
-                android:textStyle="bold" />
+                android:text="@string/login_don_have_account_register"
+                android:textSize="@dimen/hint_word_textSize" />
+
 
 
         </LinearLayout>

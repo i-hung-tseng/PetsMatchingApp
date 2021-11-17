@@ -9,6 +9,7 @@
     <string name="hint_enter_your_password">請輸入密碼</string>
     <string name="login_forgot_account">忘記密碼</string>
     <string name="login_don_have_account">還沒有帳號嗎?</string>
+    <string name="login_don_have_account_register">還沒有帳號嗎?註冊</string>
     <string name="register">註冊</string>
     <string name="msg_login_successful">登入成功</string>
 
@@ -16,8 +17,7 @@
     <string name="hint_enter_your_name">請輸入您的姓名</string>
     <string name="hint_enter_again_password">請再次輸入您的密碼</string>
     <string name="hint_do_not_enter_same_password">請再確認密碼是否一致</string>
-    <string name="register_already_have_account">我已經註冊囉!</string>
-    <string name="register_pick_me_to_login">點我登入</string>
+    <string name="register_already_have_account">我已經註冊囉!點我登入</string>
     <string name="register_success">恭喜您註冊成功!</string>
 
     <string name="toolbar_title_forgot_account">忘記密碼</string>

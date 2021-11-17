@@ -12,6 +12,8 @@ import com.example.petsmatchingapp.R
 import com.google.firebase.auth.FirebaseAuth
 import timber.log.Timber
 import java.net.URL
+import java.text.SimpleDateFormat
+import java.util.*
 
 object Constant {
 
@@ -70,6 +72,12 @@ object Constant {
 
     fun getFileExtension(activity: Activity, uri: Uri): String?{
         return MimeTypeMap.getSingleton().getExtensionFromMimeType(activity.contentResolver.getType(uri))
+    }
+
+    fun getDataForm(timestamp: Any): String{
+        val mFormat = "HH:mm"
+        val sdf = SimpleDateFormat(mFormat, Locale.getDefault())
+        return sdf.format(timestamp)
     }
 
 

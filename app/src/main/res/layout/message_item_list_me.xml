@@ -52,17 +52,7 @@
 
             </com.example.petsmatchingapp.utils.JFTextView>
 
-            <ImageView
-                android:id="@+id/iv_item_list_me"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:layout_alignParentEnd="true"
-                android:visibility="gone"
-                android:layout_marginEnd="5dp"
-                android:maxWidth="200dp">
 
-            </ImageView>
 
 
     </RelativeLayout>
